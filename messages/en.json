@@ -249,6 +249,14 @@
         },
         "note": "Anything we should know? (optional)",
         "notePh": "I prefer Mongolian · I'm in PST · etc."
+      },
+      "missing": {
+        "lead": "To continue, please add:",
+        "name": "your name",
+        "email": "a valid email",
+        "phone": "a phone number",
+        "time": "an appointment day and time",
+        "callbackWindow": "a callback window"
       }
     },
     "pay": {

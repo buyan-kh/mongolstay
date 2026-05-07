@@ -214,6 +214,11 @@ h1.hero-h em{font-style:italic;color:var(--accent)}
 .flow-body{padding:8px 0 24px;min-height:300px}
 .flow-foot{padding:18px 0 0;border-top:1px solid var(--line);
   display:flex;align-items:center;gap:10px}
+.flow-hint{margin-top:18px;padding:10px 14px;border-radius:var(--r-md);
+  background:color-mix(in oklab, var(--warn) 8%, transparent);
+  border:1px solid color-mix(in oklab, var(--warn) 28%, transparent);
+  color:var(--ink);font-size:13px;line-height:1.5}
+.flow-hint strong{color:var(--warn);font-weight:600}
 
 /* ── eligibility ── */
 .elig{display:flex;flex-direction:column;gap:24px}

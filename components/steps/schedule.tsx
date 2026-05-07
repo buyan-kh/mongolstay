@@ -86,16 +86,24 @@ export function ScheduleStep() {
   };
 
   // Validation
-  const contactValid =
-    state.contact.name.trim().length > 1 &&
-    /\S+@\S+\.\S+/.test(state.contact.email) &&
-    state.contact.phone.replace(/\D/g, "").length >= 7;
+  const nameValid = state.contact.name.trim().length > 1;
+  const emailValid = /\S+@\S+\.\S+/.test(state.contact.email);
+  const phoneValid = state.contact.phone.replace(/\D/g, "").length >= 7;
+  const contactValid = nameValid && emailValid && phoneValid;
 
   const apptValid = !!apptIso;
   const callbackValid = !!state.schedule.callback?.window;
 
   const canNext =
     contactValid && (mode === "appointment" ? apptValid : callbackValid);
+
+  // Build a list of what's missing so we can show it next to the disabled button.
+  const missing: string[] = [];
+  if (!nameValid) missing.push(t("missing.name"));
+  if (!emailValid) missing.push(t("missing.email"));
+  if (!phoneValid) missing.push(t("missing.phone"));
+  if (mode === "appointment" && !apptValid) missing.push(t("missing.time"));
+  if (mode === "callback" && !callbackValid) missing.push(t("missing.callbackWindow"));
 
   return (
     <>
@@ -250,6 +258,12 @@ export function ScheduleStep() {
           </div>
         )}
       </div>
+
+      {!canNext && missing.length > 0 && (
+        <div className="flow-hint" role="status">
+          {t("missing.lead")} <strong>{missing.join(" · ")}</strong>
+        </div>
+      )}
 
       <FlowFooter
         prevHref={`/file/${kind}/documents`}
