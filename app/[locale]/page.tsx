@@ -1,4 +1,4 @@
-import { Attorneys, CTABand, Footer, Hero, HowItWorks, LetterWall, Nav, Strip } from "@/components/landing";
+import { /* Attorneys, */ CTABand, Footer, Hero, HowItWorks, LetterWall, Nav, Strip } from "@/components/landing";
 
 export default function Page() {
   return (
@@ -8,7 +8,7 @@ export default function Page() {
       <Strip />
       <HowItWorks />
       <LetterWall />
-      <Attorneys />
+      {/* <Attorneys /> — hidden until we have real attorneys + bar numbers + photos */}
       <CTABand />
       <Footer />
     </div>
