@@ -37,6 +37,9 @@ export default async function Page({
         </div>
         <LoginForm next={next} />
         <div className="auth-foot">
+          <div style={{ marginBottom: 8 }}>
+            <Link href="/forgot-password">{t("forgotLink")}</Link>
+          </div>
           {t("noAccount")} <Link href={`/signup${next ? `?next=${encodeURIComponent(next)}` : ""}`}>{t("signUp")}</Link>
         </div>
       </div>

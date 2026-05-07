@@ -32,7 +32,20 @@
     "signupEmailHint": "Use the email you used to file. We'll auto-attach your application.",
     "pwHint": "At least 10 characters with upper, lower, and a number.",
     "pwTooShort": "Password must be at least 10 characters.",
-    "pwTooSimple": "Password needs an uppercase letter, lowercase letter, and a number."
+    "pwTooSimple": "Password needs an uppercase letter, lowercase letter, and a number.",
+    "pwMismatch": "Passwords don't match.",
+    "forgotLink": "Forgot your password?",
+    "forgotH": "Reset your password",
+    "forgotS": "Enter your email and we'll send you a link to set a new password.",
+    "sendResetLink": "Send reset link",
+    "workingReset": "Sending…",
+    "resetSent": "If that email is on file, we just sent a reset link. Check your inbox.",
+    "resetH": "Set a new password",
+    "resetS": "Choose a strong password — at least 10 characters with mixed case and a number.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "setNewPassword": "Set new password",
+    "backToSignIn": "Back to sign in"
   },
   "dashboard": {
     "title": "Your applications",

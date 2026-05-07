@@ -156,6 +156,110 @@ export function SignupForm({ next }: { next?: string }) {
   );
 }
 
+export function ForgotPasswordForm() {
+  const t = useTranslations("auth");
+  const [email, setEmail] = useState("");
+  const [s, setS] = useState<FormState>({ busy: false, error: null, notice: null });
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setS({ busy: true, error: null, notice: null });
+    const supabase = getBrowserSupabase();
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${origin}/auth/callback?next=${encodeURIComponent("/reset-password")}`,
+    });
+    if (error) {
+      setS({ busy: false, error: error.message, notice: null });
+      return;
+    }
+    // Don't reveal whether the email exists — just say "sent" either way.
+    setS({ busy: false, error: null, notice: t("resetSent") });
+  };
+
+  return (
+    <form className="auth-form" onSubmit={submit}>
+      <label className="field">
+        <span className="field-lbl">{t("email")}</span>
+        <input
+          className="ipt"
+          type="email"
+          required
+          autoComplete="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </label>
+      {s.error && <div className="field-err" role="alert">{s.error}</div>}
+      {s.notice && <div className="field-hint" style={{ color: "var(--good)" }}>{s.notice}</div>}
+      <button type="submit" className="btn btn-accent btn-lg" disabled={s.busy}>
+        {s.busy ? t("workingReset") : t("sendResetLink")}
+      </button>
+    </form>
+  );
+}
+
+export function ResetPasswordForm() {
+  const t = useTranslations("auth");
+  const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [s, setS] = useState<FormState>({ busy: false, error: null, notice: null });
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password.length < 10) return setS({ busy: false, error: t("pwTooShort"), notice: null });
+    if (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password)) {
+      return setS({ busy: false, error: t("pwTooSimple"), notice: null });
+    }
+    if (password !== confirm) {
+      return setS({ busy: false, error: t("pwMismatch"), notice: null });
+    }
+
+    setS({ busy: true, error: null, notice: null });
+    const supabase = getBrowserSupabase();
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) return setS({ busy: false, error: error.message, notice: null });
+
+    router.push("/dashboard");
+    router.refresh();
+  };
+
+  return (
+    <form className="auth-form" onSubmit={submit}>
+      <label className="field">
+        <span className="field-lbl">{t("newPassword")}</span>
+        <input
+          className="ipt"
+          type="password"
+          required
+          minLength={10}
+          autoComplete="new-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <span className="field-hint">{t("pwHint")}</span>
+      </label>
+      <label className="field">
+        <span className="field-lbl">{t("confirmPassword")}</span>
+        <input
+          className="ipt"
+          type="password"
+          required
+          minLength={10}
+          autoComplete="new-password"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+        />
+      </label>
+      {s.error && <div className="field-err" role="alert">{s.error}</div>}
+      <button type="submit" className="btn btn-accent btn-lg" disabled={s.busy}>
+        {s.busy ? t("workingReset") : t("setNewPassword")}
+      </button>
+    </form>
+  );
+}
+
 export function SignOutButton() {
   const t = useTranslations("auth");
   const router = useRouter();
