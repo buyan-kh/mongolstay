@@ -55,12 +55,12 @@ export function FiledStep() {
         </div>
         <div className="success-h">{heading}</div>
         <div className="success-s">
-          {t(kind === "asylum" ? "s_asylum" : "s_j1f1")}
+          {t(`s_${kind}`)}
         </div>
 
         <div className="success-card">
           <div className="success-row"><span>{t("reference")}</span><span className="mono">{reference}</span></div>
-          <div className="success-row"><span>{t("filing")}</span><span>{kind === "asylum" ? "I-589" : "I-539"}</span></div>
+          <div className="success-row"><span>{t("filing")}</span><span>{kind === "asylum" ? "I-589" : "I-539"}</span></div>{/* both j1f1 and b1b2f1 are I-539 */}
           {state.schedule.mode === "appointment" && apptDate && (
             <div className="success-row">
               <span>{t("appointment")}</span>
@@ -126,7 +126,7 @@ export function FiledStep() {
           </div>
           <div>
             <div className="invoice-block-h">{tInv("matter")}</div>
-            <div>{kind === "asylum" ? tPay("asylumLine") : tPay("j1f1Line")}</div>
+            <div>{tPay(`${kind}Line`)}</div>
             {state.schedule.mode === "appointment" && apptDate && (
               <div className="invoice-meta-row">
                 {tInv("appointment")}: {apptDate.toLocaleDateString(locale, { month: "short", day: "numeric" })}{" "}
@@ -151,7 +151,7 @@ export function FiledStep() {
           <tbody>
             <tr>
               <td>
-                {kind === "asylum" ? tPay("asylumLine") : tPay("j1f1Line")}
+                {tPay(`${kind}Line`)}
                 <div className="invoice-sub">{tInv("attorneyIncl")}</div>
               </td>
               <td className="num mono">${fee.toLocaleString()}.00</td>

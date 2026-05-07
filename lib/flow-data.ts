@@ -1,7 +1,8 @@
-export type FlowKind = "j1f1" | "asylum";
+export type FlowKind = "j1f1" | "b1b2f1" | "asylum";
 
 export const PRICES = {
   j1f1: { fee: 2000, uscisFee: 370 },
+  b1b2f1: { fee: 2000, uscisFee: 370 },   // same I-539 fee structure as J-1 → F-1
   asylum: { fee: 4000, uscisFee: 0 },
 } as const;
 
@@ -12,7 +13,7 @@ export type ScheduleMode = "appointment" | "callback";
 export type AppointmentChannel = "office" | "video";
 export type PaymentMethod = "card" | "zelle" | "cash";
 
-export const FORM_LABEL = { j1f1: "I-539", asylum: "I-589" } as const;
+export const FORM_LABEL = { j1f1: "I-539", b1b2f1: "I-539", asylum: "I-589" } as const;
 
 // IDs only — display text comes from messages/{locale}.json under
 // flow.elig.questions.{kind}.{id} and flow.docs.{kind}.{id}.
@@ -33,10 +34,21 @@ export const QUESTION_IDS: Record<FlowKind, { id: string; multi?: boolean }[]> =
     { id: "i20" },
     { id: "funds" },
   ],
+  // B-1 / B-2 → F-1 questions. The "intent" question matters: USCIS denies
+  // change-of-status when the visitor entered with preconceived intent to study.
+  b1b2f1: [
+    { id: "inUS" },
+    { id: "currentBStatus" },
+    { id: "bExpiry" },
+    { id: "intent" },
+    { id: "i20" },
+    { id: "funds" },
+  ],
 };
 
 export const DOC_IDS: Record<FlowKind, string[]> = {
   j1f1: ["ds2019", "i94", "passport", "i20", "funds", "sevis"],
+  b1b2f1: ["i94", "passport", "visa", "i20", "funds", "sevis"],
   asylum: ["id", "i94", "statement", "country", "relations", "evidence"],
 };
 
@@ -65,7 +77,7 @@ export const COUNTRIES = [
 ];
 
 export function isFlowKind(s: string): s is FlowKind {
-  return s === "j1f1" || s === "asylum";
+  return s === "j1f1" || s === "asylum" || s === "b1b2f1";
 }
 export function isStep(s: string): s is Step {
   return (STEPS as readonly string[]).includes(s);

@@ -82,6 +82,16 @@
       "price": "2,000",
       "priceFootnote": "flat · attorney included"
     },
+    "b1b2f1": {
+      "tag": "Form I-539",
+      "h2Pre": "Change",
+      "h2Em": "B-1/B-2 to F-1.",
+      "body": "Visiting on a tourist or business visa and want to stay as a student? We file the I-539 and the supporting brief showing the change of intent.",
+      "cta": "Change my status",
+      "points": ["B-1 or B-2 visitor", "I-539 + intent brief", "Preconceived-intent analysis", "6 docs · 4 minutes"],
+      "price": "2,000",
+      "priceFootnote": "flat · attorney included"
+    },
     "asylum": {
       "tag": "Form I-589",
       "h2Pre": "Apply for",
@@ -120,9 +130,10 @@
     "creds": { "bar": "Bar admissions", "practice": "Practice", "focus": "Focus" }
   },
   "ctaBand": {
-    "hPre": "Two filings.",
+    "hPre": "Three filings.",
     "hEm": "One click each.",
     "j1f1": "Change J-1 → F-1 · $2,000",
+    "b1b2f1": "Change B-1/B-2 → F-1 · $2,000",
     "asylum": "Apply for asylum · $4,000"
   },
   "footer": {
@@ -142,7 +153,7 @@
   "language": { "label": "Language", "mn": "Монгол", "en": "English", "switchTo": "Switch to" },
   "flow": {
     "back": "Back to mongolstay.com",
-    "tag": { "j1f1": "J-1 → F-1 · I-539", "asylum": "Asylum · I-589" },
+    "tag": { "j1f1": "J-1 → F-1 · I-539", "b1b2f1": "B-1/B-2 → F-1 · I-539", "asylum": "Asylum · I-589" },
     "stepN": "Step {current} of {total} · {label}",
     "buttons": {
       "back": "Back",
@@ -167,6 +178,12 @@
         "schedule":    { "h": "Pick a time to meet.",     "s": "Book an in-person or video appointment, or request a callback. We'll confirm your contact info too." },
         "payment":     { "h": "Pay $2,000 — flat.",       "s": "Card, Zelle, or cash at your appointment. Refunded if our attorneys decline your case after review." }
       },
+      "b1b2f1": {
+        "eligibility": { "h": "Quick eligibility check.", "s": "A few questions. We'll know if a B-1/B-2 → F-1 change is the right path." },
+        "documents":   { "h": "Upload what you have.",    "s": "PDF, JPG, or PNG. Drop in whatever you can find — we collect the rest at your appointment." },
+        "schedule":    { "h": "Pick a time to meet.",     "s": "Book an in-person or video appointment, or request a callback. We'll confirm your contact info too." },
+        "payment":     { "h": "Pay $2,000 — flat.",       "s": "Card, Zelle, or cash at your appointment. Refunded if our attorneys decline your case after review." }
+      },
       "asylum": {
         "eligibility": { "h": "A few questions about your situation.", "s": "These determine your filing strategy. Nothing you say here is filed with USCIS." },
         "documents":   { "h": "Upload what you have.",                 "s": "PDF, JPG, or PNG. Drop in whatever you can find — we collect the rest at your appointment." },
@@ -177,6 +194,7 @@
     "elig": {
       "verdictH": "You look eligible.",
       "verdictS_j1f1": "Based on your answers, we'll prepare an I-539 change of status petition. A licensed attorney will review before filing.",
+      "verdictS_b1b2f1": "Based on your answers, we'll prepare an I-539 change of status petition with a supporting brief showing your change of intent. A licensed attorney will review before filing.",
       "verdictS_asylum": "Based on your answers, we'll prepare an I-589 asylum application. A licensed attorney will review before filing.",
       "questions": {
         "j1f1": {
@@ -186,6 +204,14 @@
           "waiver":    { "q": "Are you subject to the 2-year home residency requirement?", "opts": ["Yes", "No", "Already waived"] },
           "i20":       { "q": "Do you have an I-20 from a SEVP-approved school?", "opts": ["Yes", "Not yet", "In progress"] },
           "funds":     { "q": "Can you show proof of funds for at least one year?", "opts": ["Yes", "Partially", "No"] }
+        },
+        "b1b2f1": {
+          "inUS":           { "q": "Are you currently inside the United States?", "opts": ["Yes", "No"] },
+          "currentBStatus": { "q": "Did you enter the U.S. on a B-1 or B-2 visa?", "opts": ["B-1 (business)", "B-2 (tourist)", "Either / both", "Other / not sure"] },
+          "bExpiry":        { "q": "When does your authorized stay (I-94 expiration) end?", "opts": ["Already expired", "Less than 30 days", "1–3 months", "More than 3 months", "Not sure"] },
+          "intent":         { "q": "When you entered the U.S., did you intend to study?", "opts": ["No, that decision came later", "Maybe — I was considering it", "Yes, I intended to study"] },
+          "i20":            { "q": "Do you have an I-20 from a SEVP-approved school?", "opts": ["Yes", "Not yet", "In progress"] },
+          "funds":          { "q": "Can you show proof of funds for at least one year?", "opts": ["Yes", "Partially", "No"] }
         },
         "asylum": {
           "inUS":          { "q": "Are you currently inside the United States?", "opts": ["Yes", "No"] },
@@ -210,6 +236,14 @@
         "ds2019":   { "name": "Current DS-2019",            "hint": "From your J-1 program sponsor" },
         "i94":      { "name": "Form I-94",                  "hint": "Most recent travel record · download from CBP" },
         "passport": { "name": "Passport biographic page",   "hint": "Page with your photo & details" },
+        "i20":      { "name": "Form I-20 from new school",  "hint": "Issued by your accepting U.S. school" },
+        "funds":    { "name": "Proof of financial support", "hint": "Bank letter or sponsor I-134" },
+        "sevis":    { "name": "SEVIS fee receipt (I-901)",  "hint": "$350 fee paid to SEVIS" }
+      },
+      "b1b2f1": {
+        "i94":      { "name": "Form I-94 arrival record",   "hint": "Most recent U.S. entry record · download from CBP" },
+        "passport": { "name": "Passport biographic page",   "hint": "Page with your photo & details" },
+        "visa":     { "name": "B-1 / B-2 visa stamp",       "hint": "Photo or scan of the visa page in your passport" },
         "i20":      { "name": "Form I-20 from new school",  "hint": "Issued by your accepting U.S. school" },
         "funds":    { "name": "Proof of financial support", "hint": "Bank letter or sponsor I-134" },
         "sevis":    { "name": "SEVIS fee receipt (I-901)",  "hint": "$350 fee paid to SEVIS" }
@@ -263,6 +297,7 @@
       "secured": "256-bit TLS · processed by Stripe · refunded if attorney declines case",
       "summary": "Order summary",
       "j1f1Line": "J-1 → F-1 change of status (I-539)",
+      "b1b2f1Line": "B-1/B-2 → F-1 change of status (I-539)",
       "asylumLine": "Asylum application (I-589)",
       "uscisFee": "USCIS filing fee",
       "attorneyReview": "Attorney review",
@@ -321,6 +356,7 @@
       "hSoon": "Filed. We'll see you soon.",
       "hCallback": "Got it. We'll call you.",
       "s_j1f1": "Your I-539 change of status petition is queued for attorney review. We've emailed your confirmation and a checklist of anything we still need.",
+      "s_b1b2f1": "Your I-539 change of status petition (B-1/B-2 → F-1) is queued for attorney review. We've emailed your confirmation and a checklist of anything we still need.",
       "s_asylum": "Your I-589 asylum application is queued for attorney review. We've emailed your confirmation and a checklist of anything we still need.",
       "reference": "Reference",
       "filing": "Filing",

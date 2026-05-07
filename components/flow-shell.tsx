@@ -47,7 +47,15 @@ export function FlowShell({ kind, children }: { kind: FlowKind; children: React.
 
         <div className="flow-head">
           <div className="flow-tag">
-            <span className="sq" style={{ background: kind === "asylum" ? "var(--accent)" : "var(--ink)" }} />
+            <span
+              className="sq"
+              style={{
+                background:
+                  kind === "asylum" ? "var(--accent)" :
+                  kind === "b1b2f1" ? "var(--ink-2)" :
+                  "var(--ink)",
+              }}
+            />
             {t(`tag.${kind}`)}
           </div>
           <h1 className="flow-title">{t(`titles.${kind}.${stepKey}.h`)}</h1>

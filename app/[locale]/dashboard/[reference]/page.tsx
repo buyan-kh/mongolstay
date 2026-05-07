@@ -52,7 +52,7 @@ export default async function Page({
   const unreadIds = messageList.filter((m) => m.direction === "in" && !m.read_at).map((m) => m.id);
 
   const filing = intake.kind === "asylum" ? "I-589" : "I-539";
-  const filingLabel = intake.kind === "asylum" ? tPay("asylumLine") : tPay("j1f1Line");
+  const filingLabel = tPay(`${intake.kind}Line`);
   const statusLabel =
     intake.payment_status === "paid"
       ? tInv("statusPaid")
@@ -89,7 +89,12 @@ export default async function Page({
           <div className="flow-tag" style={{ marginBottom: 8 }}>
             <span
               className="sq"
-              style={{ background: intake.kind === "asylum" ? "var(--accent)" : "var(--ink)" }}
+              style={{
+                background:
+                  intake.kind === "asylum" ? "var(--accent)" :
+                  intake.kind === "b1b2f1" ? "var(--ink-2)" :
+                  "var(--ink)",
+              }}
             />
             {filing}
           </div>

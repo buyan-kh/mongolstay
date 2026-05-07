@@ -7,7 +7,7 @@ export type IntakeRow = {
   id: string;
   created_at: string;
   updated_at: string;
-  kind: "j1f1" | "asylum";
+  kind: "j1f1" | "b1b2f1" | "asylum";
   reference: string;
   client_user_id: string | null;
   client_name: string | null;
@@ -30,7 +30,7 @@ export type IntakeRow = {
 };
 
 export type IntakeInsert = Partial<Omit<IntakeRow, "id" | "created_at" | "updated_at">> & {
-  kind: "j1f1" | "asylum";
+  kind: "j1f1" | "b1b2f1" | "asylum";
   reference: string;
 };
 

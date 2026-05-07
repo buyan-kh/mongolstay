@@ -66,6 +66,7 @@ export async function Hero() {
       </div>
       <div className="services" id="flows">
         <ServiceCard kind="j1f1" />
+        <ServiceCard kind="b1b2f1" />
         <ServiceCard kind="asylum" />
       </div>
     </header>
@@ -82,15 +83,18 @@ function Stat({ num, label, sub }: { num: string; label: string; sub?: string })
   );
 }
 
-async function ServiceCard({ kind }: { kind: "j1f1" | "asylum" }) {
+async function ServiceCard({ kind }: { kind: "j1f1" | "b1b2f1" | "asylum" }) {
   const t = await getTranslations(`services.${kind}`);
-  const isAsylum = kind === "asylum";
+  const tagColor =
+    kind === "asylum" ? "var(--accent)" :
+    kind === "b1b2f1" ? "var(--ink-2)" :
+    "var(--ink)";
   // next-intl arrays come back via t.raw().
   const points = (t.raw("points") as string[]) ?? [];
   return (
     <Link className="svc" href={`/file/${kind}/eligibility`}>
       <div className="svc-tag">
-        <span className="sq" style={{ background: isAsylum ? "var(--accent)" : "var(--ink)" }} />
+        <span className="sq" style={{ background: tagColor }} />
         {t("tag")}
       </div>
       <h2>
@@ -222,6 +226,9 @@ export async function CTABand() {
         <div className="cta-actions">
           <Link className="btn btn-lg btn-primary" href="/file/j1f1/eligibility">
             {t("j1f1")} <Icon.ArrowRight style={{ width: 14, height: 14 }} />
+          </Link>
+          <Link className="btn btn-lg btn-primary" href="/file/b1b2f1/eligibility">
+            {t("b1b2f1")} <Icon.ArrowRight style={{ width: 14, height: 14 }} />
           </Link>
           <Link className="btn btn-lg btn-accent" href="/file/asylum/eligibility">
             {t("asylum")} <Icon.ArrowRight style={{ width: 14, height: 14 }} />

@@ -70,7 +70,7 @@ export function EligibilityStep() {
             <div>
               <div className="elig-verdict-h">{t("verdictH")}</div>
               <div className="elig-verdict-s">
-                {t(kind === "asylum" ? "verdictS_asylum" : "verdictS_j1f1")}
+                {t(`verdictS_${kind}`)}
               </div>
             </div>
           </div>

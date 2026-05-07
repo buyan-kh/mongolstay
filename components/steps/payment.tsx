@@ -200,7 +200,7 @@ export function PaymentStep() {
           <div className="pay-summary">
             <div className="pay-sum-h">{t("summary")}</div>
             <div className="pay-sum-row">
-              <span>{kind === "asylum" ? t("asylumLine") : t("j1f1Line")}</span>
+              <span>{t(`${kind}Line`)}</span>
               <span className="mono">${fee.toLocaleString()}.00</span>
             </div>
             {uscisFee > 0 && (

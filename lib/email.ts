@@ -7,6 +7,7 @@ const ATTORNEY_INBOX = process.env.INTAKE_TO || "intake@mongolstay.com";
 
 const FILING_LABEL: Record<FlowKind, string> = {
   j1f1: "J-1 → F-1 change of status (I-539)",
+  b1b2f1: "B-1/B-2 → F-1 change of status (I-539)",
   asylum: "Asylum application (I-589)",
 };
 

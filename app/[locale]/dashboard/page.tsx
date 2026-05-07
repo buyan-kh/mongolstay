@@ -9,7 +9,7 @@ import { getServerSupabase } from "@/lib/supabase/server";
 type IntakeListRow = {
   id: string;
   reference: string;
-  kind: "j1f1" | "asylum";
+  kind: "j1f1" | "b1b2f1" | "asylum";
   payment_status: string;
   payment_method: string | null;
   paid_at: string | null;
@@ -79,8 +79,7 @@ export default async function Page() {
               const incoming = (it.intake_messages ?? []).filter((m) => m.direction === "in");
               const unread = incoming.filter((m) => !m.read_at).length;
               const filing = it.kind === "asylum" ? "I-589" : "I-539";
-              const filingLabel =
-                it.kind === "asylum" ? tPay("asylumLine") : tPay("j1f1Line");
+              const filingLabel = tPay(`${it.kind}Line`);
               const statusLabel =
                 it.payment_status === "paid"
                   ? tInv("statusPaid")
@@ -98,7 +97,12 @@ export default async function Page() {
                     <div className="dash-card-tag">
                       <span
                         className="sq"
-                        style={{ background: it.kind === "asylum" ? "var(--accent)" : "var(--ink)" }}
+                        style={{
+                          background:
+                            it.kind === "asylum" ? "var(--accent)" :
+                            it.kind === "b1b2f1" ? "var(--ink-2)" :
+                            "var(--ink)",
+                        }}
                       />
                       {filing}
                     </div>
