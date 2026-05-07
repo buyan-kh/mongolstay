@@ -200,7 +200,14 @@ export default async function Page({
               {(intake.intake_documents ?? []).map((d) => (
                 <li key={d.id} className="dash-doc">
                   <Icon.File style={{ width: 14, height: 14 }} />
-                  <span>{d.original_filename || d.doc_id}</span>
+                  <a
+                    href={`/api/download/${d.id}`}
+                    target="_blank"
+                    rel="noopener"
+                    style={{ color: "inherit" }}
+                  >
+                    {d.original_filename || d.doc_id}
+                  </a>
                   <span className="dash-card-lbl mono" style={{ marginLeft: "auto" }}>{d.doc_id}</span>
                 </li>
               ))}
