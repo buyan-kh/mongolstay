@@ -106,7 +106,10 @@
       "priceFootnote": "flat · attorney included"
     }
   },
-  "strip": { "lbl": "Clients from" },
+  "strip": {
+    "lbl": "Clients from",
+    "countries": ["Mongolia", "China", "India", "Korea", "Vietnam", "Russia", "Iran", "Turkey", "Brazil", "Venezuela", "Nigeria", "Egypt", "Mexico", "Pakistan", "Ukraine"]
+  },
   "how": {
     "eyebrow": "How it works",
     "hPre": "Four steps.",
@@ -154,6 +157,17 @@
     "languages": "Languages"
   },
   "language": { "label": "Language", "mn": "Монгол", "en": "English", "switchTo": "Switch to" },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "home": "Back to mongolstay.com"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "body": "We've been notified. Try again, or head back home and start over.",
+    "tryAgain": "Try again",
+    "home": "Back to mongolstay.com"
+  },
   "flow": {
     "back": "Back to mongolstay.com",
     "tag": { "j1f1": "J-1 → F-1 · I-539", "b1b2f1": "B-1/B-2 → F-1 · I-539", "asylum": "Asylum · I-589" },

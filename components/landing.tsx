@@ -4,7 +4,7 @@ import { BrandMark, Icon } from "./icons";
 import { LanguageSwitcher } from "./language-switcher";
 import { SignOutButton } from "./auth-forms";
 import { ApprovalLetter } from "./uscis-letter";
-import { ATTORNEYS, COUNTRIES, LETTERS } from "@/lib/flow-data";
+import { ATTORNEYS, LETTERS } from "@/lib/flow-data";
 import { getUser } from "@/lib/auth";
 
 export async function Nav() {
@@ -19,8 +19,8 @@ export async function Nav() {
         <div className="nav-links">
           <a href="#flows">{t("services")}</a>
           <a href="#wins">{t("approvals")}</a>
-          <a href="#team">{t("attorneys")}</a>
           <a href="#how">{t("how")}</a>
+          {/* Attorneys link removed until the section is restored */}
         </div>
         <div className="nav-spacer" />
         <LanguageSwitcher />
@@ -120,13 +120,14 @@ async function ServiceCard({ kind }: { kind: "j1f1" | "b1b2f1" | "asylum" }) {
 
 export async function Strip() {
   const t = await getTranslations("strip");
+  const countries = (t.raw("countries") as string[]) ?? [];
   return (
     <div className="strip">
       <div className="strip-row">
         <div className="strip-lbl">{t("lbl")}</div>
         <div className="strip-flags">
-          {COUNTRIES.map((c, i) => (
-            <span key={c}>{c}{i < COUNTRIES.length - 1 ? " · " : ""}</span>
+          {countries.map((c, i) => (
+            <span key={c}>{c}{i < countries.length - 1 ? " · " : ""}</span>
           ))}
         </div>
       </div>
@@ -260,7 +261,6 @@ export async function Footer() {
           </div>
           <div>
             <b>{t("firm")}</b>
-            <a href="#team">{tNav("attorneys")}</a>
             <a href="#wins">{tNav("approvals")}</a>
             <a href="#">{t("press")}</a>
           </div>

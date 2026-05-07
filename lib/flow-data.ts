@@ -71,10 +71,8 @@ export const ATTORNEYS = [
   { initials: "PT", name: "Priya Tandon", role: "Of Counsel",         bar: "CA · IL",         years: "18 yrs", focus: "Federal Litigation" },
 ] as const;
 
-export const COUNTRIES = [
-  "India", "China", "Brazil", "Iran", "Nigeria", "Venezuela", "Russia", "Turkey",
-  "Korea", "Vietnam", "Egypt", "Mexico", "Colombia", "Pakistan", "Ukraine",
-];
+// Country labels for the landing strip live in messages/{locale}.json now
+// (see strip.countries) so they can be localized.
 
 export function isFlowKind(s: string): s is FlowKind {
   return s === "j1f1" || s === "asylum" || s === "b1b2f1";
