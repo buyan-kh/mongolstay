@@ -123,6 +123,10 @@ export async function POST(req: Request) {
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      // Card includes Apple Pay + Google Pay + Link automatically when the
+      // browser supports them. Pinning to ['card'] excludes Cash App Pay,
+      // Klarna, Affirm — none of which fit legal flat-fee retainers.
+      payment_method_types: ["card"],
       customer_email: contact.email,
       line_items: [
         {
