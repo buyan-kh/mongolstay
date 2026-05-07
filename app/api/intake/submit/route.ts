@@ -4,6 +4,8 @@ import { attachDocument, upsertIntake } from "@/lib/intake";
 import { getUser } from "@/lib/auth";
 import { isFlowKind, PRICES, type FlowKind, type PaymentMethod } from "@/lib/flow-data";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { verifyStoredDocument } from "@/lib/upload-verify";
+import { originAllowed, rateLimit, requestIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -37,6 +39,13 @@ function bad(message: string, status = 400) {
 }
 
 export async function POST(req: Request) {
+  if (!originAllowed(req)) return bad("forbidden", 403);
+
+  const ip = requestIp(req.headers);
+  if (!rateLimit("intake-submit", ip, { capacity: 10, refillPerMinute: 1 })) {
+    return bad("rate limited", 429);
+  }
+
   const body = (await req.json().catch(() => null)) as SubmitBody | null;
   if (!body) return bad("invalid body");
 
@@ -45,11 +54,24 @@ export async function POST(req: Request) {
   if (!isFlowKind(kind)) return bad("invalid kind");
   if (!/^MS-\d{6}$/.test(reference ?? "")) return bad("invalid reference");
   if (!contact?.name || !contact?.email || !contact?.phone) return bad("missing contact info");
+  if (typeof contact.email !== "string" || !/\S+@\S+\.\S+/.test(contact.email)) return bad("invalid email");
   if (!["card", "zelle", "cash"].includes(method)) return bad("invalid method");
 
   // Bot check (skipped in dev when no key configured).
   const ok = await verifyTurnstile(turnstileToken, req.headers.get("x-forwarded-for"));
   if (!ok) return bad("verification failed", 403);
+
+  // Re-verify every declared document is actually in Storage at the right
+  // path with an allowed MIME type and size. Reject the entire submit if any
+  // document fails — we don't want partial intakes referencing files we
+  // can't trust.
+  if (Array.isArray(documents)) {
+    for (const d of documents) {
+      if (!d?.docId || !d?.path) return bad("invalid document entry");
+      const v = await verifyStoredDocument(kind, reference, d.path);
+      if (!v.ok) return bad(`document verification failed: ${v.reason}`, 422);
+    }
+  }
 
   const { fee, uscisFee } = PRICES[kind];
   const amountCents = (fee + uscisFee) * 100;

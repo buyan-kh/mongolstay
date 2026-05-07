@@ -70,6 +70,18 @@ export function SignupForm({ next }: { next?: string }) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Client-side password policy. Server-side enforcement also lives in
+    // supabase/config.toml (minimum_password_length + password_requirements).
+    if (password.length < 10) {
+      setS({ busy: false, error: t("pwTooShort"), notice: null });
+      return;
+    }
+    if (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password)) {
+      setS({ busy: false, error: t("pwTooSimple"), notice: null });
+      return;
+    }
+
     setS({ busy: true, error: null, notice: null });
     const supabase = getBrowserSupabase();
     const origin = typeof window !== "undefined" ? window.location.origin : "";
@@ -128,11 +140,12 @@ export function SignupForm({ next }: { next?: string }) {
           className="ipt"
           type="password"
           required
-          minLength={6}
+          minLength={10}
           autoComplete="new-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <span className="field-hint">{t("pwHint")}</span>
       </label>
       {s.error && <div className="field-err" role="alert">{s.error}</div>}
       {s.notice && <div className="field-hint" style={{ color: "var(--good)" }}>{s.notice}</div>}

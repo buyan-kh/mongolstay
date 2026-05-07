@@ -29,7 +29,10 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "checkEmail": "Check your email — we sent a confirmation link.",
-    "signupEmailHint": "Use the email you used to file. We'll auto-attach your application."
+    "signupEmailHint": "Use the email you used to file. We'll auto-attach your application.",
+    "pwHint": "At least 10 characters with upper, lower, and a number.",
+    "pwTooShort": "Password must be at least 10 characters.",
+    "pwTooSimple": "Password needs an uppercase letter, lowercase letter, and a number."
   },
   "dashboard": {
     "title": "Your applications",
