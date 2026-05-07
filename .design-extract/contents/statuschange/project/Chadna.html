@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chadna — Submit in 4 minutes. Pay. Done.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="uscis.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="flows.jsx"></script>
+<script type="text/babel" src="landing.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "aesthetic": "modern",
+  "palette": [
+    "#1F4FFF",
+    "#0B1220",
+    "#F7F8FB"
+  ],
+  "heroLayout": "default"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [flow, setFlow] = useState(null); // 'j1f1' | 'asylum' | null
+
+  // map aesthetic → data attribute
+  const aestheticAttr =
+    t.aesthetic === 'modern' ? null :
+    t.aesthetic === 'serious' ? 'serious' :
+    t.aesthetic === 'warm' ? 'warm' : null;
+
+  // map palette → CSS vars (override modern default)
+  const paletteStyle = (() => {
+    const [a, ink, bg2] = t.palette || [];
+    if (!a) return null;
+    return { '--accent': a, '--ink': ink, '--bg-2': bg2,
+             '--accent-2': `color-mix(in oklab, ${a} 70%, black)` };
+  })();
+
+  return (
+    <div className="app"
+         data-aesthetic={aestheticAttr || undefined}
+         data-hero-layout={t.heroLayout}
+         style={paletteStyle}>
+      <Nav onCTA={() => setFlow('j1f1')} />
+      <Hero layout={t.heroLayout} onStart={setFlow} />
+      <Strip />
+      <HowItWorks />
+      <LetterWall />
+      <Attorneys />
+      <CTA onStart={setFlow} />
+      <Footer />
+
+      <FlowController kind={flow} open={!!flow} onClose={() => setFlow(null)} />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Aesthetic" />
+        <TweakRadio
+          label="Direction"
+          value={t.aesthetic}
+          options={['modern','serious','warm']}
+          onChange={(v)=>setTweak('aesthetic', v)}
+        />
+
+        <TweakSection label="Palette" />
+        <TweakColor
+          label="Theme"
+          value={t.palette}
+          options={[
+            ['#1F4FFF','#0B1220','#F7F8FB'],   /* electric blue (default modern) */
+            ['#0B1F4D','#0A0F1E','#F4F6FA'],   /* deep navy (serious) */
+            ['#B8593A','#1A1410','#F5EEE2'],   /* terracotta (warm) */
+            ['#0F8F5C','#0E1A14','#F2F7F4'],   /* moss green */
+          ]}
+          onChange={(v)=>setTweak('palette', v)}
+        />
+
+        <TweakSection label="Hero layout" />
+        <TweakRadio
+          label="Variant"
+          value={t.heroLayout}
+          options={['default','centered','stacked']}
+          onChange={(v)=>setTweak('heroLayout', v)}
+        />
+
+        <TweakSection label="Try a flow" />
+        <TweakButton onClick={() => setFlow('j1f1')}>Open J-1 → F-1</TweakButton>
+        <TweakButton onClick={() => setFlow('asylum')}>Open Asylum</TweakButton>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

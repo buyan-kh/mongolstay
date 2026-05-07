@@ -1,0 +1,71 @@
+/* uscis.css — synthetic USCIS approval-notice styling */
+.uscis{
+  position:relative;
+  background:linear-gradient(180deg, #FBFAF6 0%, #F8F5EC 100%);
+  color:#19243D;
+  border:1px solid #E5E1D2;
+  border-top:6px solid #1B3A6E;
+  padding:14px 14px 12px;
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  overflow:hidden;
+}
+.uscis-dense{padding:10px 10px 8px;font-size:7.5px;line-height:1.25}
+.uscis-head{display:flex;align-items:center;gap:8px;border-bottom:1px solid #1B3A6E;padding-bottom:6px}
+.uscis-seal{width:36px;height:36px;flex-shrink:0}
+.uscis-dense .uscis-seal{width:24px;height:24px}
+.uscis-org{flex:1;line-height:1.1}
+.uscis-dept{font-size:7px;letter-spacing:.06em;color:#1B3A6E;font-weight:600;text-transform:uppercase}
+.uscis-svc{font-family:"Times New Roman",serif;font-size:11px;color:#1B3A6E;font-weight:700;letter-spacing:-0.01em}
+.uscis-dense .uscis-svc{font-size:8.5px}
+.uscis-form{font-family:"Times New Roman",serif;font-size:14px;color:#1B3A6E;font-weight:700;letter-spacing:.02em}
+.uscis-dense .uscis-form{font-size:10px}
+
+.uscis-stamp{position:absolute;right:8px;top:42px;transform:rotate(-8deg);z-index:2;pointer-events:none}
+.uscis-dense .uscis-stamp{right:6px;top:30px}
+.stamp-box{
+  border:2px solid #1F8A5B;
+  color:#1F8A5B;
+  padding:3px 10px 4px;
+  border-radius:3px;
+  text-align:center;
+  background:rgba(255,255,255,.4);
+  box-shadow:inset 0 0 0 1px #1F8A5B;
+  font-family:"Times New Roman",serif;
+}
+.stamp-word{font-size:14px;font-weight:800;letter-spacing:.1em;line-height:1}
+.stamp-date{font-size:7px;letter-spacing:.04em;margin-top:2px;font-weight:600}
+.uscis-dense .stamp-word{font-size:9px}
+.uscis-dense .stamp-date{font-size:5px;margin-top:1px}
+
+.uscis-titleline{
+  text-align:center;font-family:"Times New Roman",serif;font-weight:700;
+  font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+  margin:8px 0 8px;color:#1B3A6E;border-bottom:1px solid #1B3A6E;padding-bottom:4px;
+}
+.uscis-dense .uscis-titleline{font-size:8px;margin:5px 0 4px;padding-bottom:2px}
+
+.uscis-meta{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:9px;line-height:1.2}
+.uscis-dense .uscis-meta{font-size:6px;gap:3px 8px}
+.uscis-meta b{font-size:7.5px;letter-spacing:.04em;color:#1B3A6E;font-weight:700;text-transform:uppercase;display:block;margin-bottom:1px}
+.uscis-dense .uscis-meta b{font-size:5px}
+.uscis-meta .mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:9px}
+.uscis-dense .uscis-meta .mono{font-size:6px}
+.uscis-meta .tiny{font-size:8px;line-height:1.15}
+.uscis-dense .uscis-meta .tiny{font-size:5px}
+
+.uscis-addr{margin-top:10px;padding:6px 8px;background:rgba(27,58,110,.04);border:1px dashed #C8C2AE}
+.uscis-dense .uscis-addr{margin-top:5px;padding:3px 5px}
+.uscis-addr .mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:8.5px;line-height:1.4}
+.uscis-dense .uscis-addr .mono{font-size:5.5px;line-height:1.3}
+
+.uscis-body{font-family:"Times New Roman",serif;font-size:10px;line-height:1.4;color:#19243D;margin-top:8px}
+.uscis-dense .uscis-body{font-size:6.5px;line-height:1.3;margin-top:4px}
+.uscis-body p{margin:0 0 6px}
+.uscis-dense .uscis-body p{margin:0 0 3px}
+.uscis-body b{font-weight:700;color:#1B3A6E}
+.uscis-body .tiny{font-size:8px}
+.uscis-dense .uscis-body .tiny{font-size:5.5px}
+
+.redact{position:absolute;background:#0a0f1e;border-radius:1px;z-index:1}
