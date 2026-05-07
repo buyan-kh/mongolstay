@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getAdminSupabase, INTAKE_BUCKET } from "@/lib/supabase/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
+import { logAudit } from "@/lib/audit";
+import { requestIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -50,6 +52,15 @@ export async function GET(
       { status: 500 },
     );
   }
+
+  await logAudit({
+    action: "doc.download",
+    actorId: user.id,
+    actorEmail: user.email,
+    ip: requestIp(_req.headers),
+    resource: `doc:${id}`,
+    metadata: { path: doc.storage_path },
+  });
 
   return NextResponse.redirect(signed.data.signedUrl);
 }

@@ -61,12 +61,34 @@ export type IntakeMessageRow = {
 
 export type IntakeMessageInsert = Omit<IntakeMessageRow, "id" | "created_at">;
 
+export type ProfileRow = {
+  id: string;
+  created_at: string;
+  role: "client" | "attorney";
+  full_name: string | null;
+};
+
+export type AuditEventRow = {
+  id: string;
+  created_at: string;
+  actor_id: string | null;
+  actor_email: string | null;
+  ip: string | null;
+  action: string;
+  resource: string | null;
+  metadata: Json;
+};
+
+export type AuditEventInsert = Omit<AuditEventRow, "id" | "created_at">;
+
 export type Database = {
   public: {
     Tables: {
       intakes: { Row: IntakeRow; Insert: IntakeInsert; Update: IntakeUpdate; Relationships: [] };
       intake_documents: { Row: IntakeDocumentRow; Insert: IntakeDocumentInsert; Update: Partial<IntakeDocumentRow>; Relationships: [] };
       intake_messages: { Row: IntakeMessageRow; Insert: IntakeMessageInsert; Update: Partial<IntakeMessageRow>; Relationships: [] };
+      profiles: { Row: ProfileRow; Insert: Partial<ProfileRow> & { id: string }; Update: Partial<ProfileRow>; Relationships: [] };
+      audit_events: { Row: AuditEventRow; Insert: AuditEventInsert; Update: Partial<AuditEventRow>; Relationships: [] };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

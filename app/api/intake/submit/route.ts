@@ -6,6 +6,7 @@ import { isFlowKind, PRICES, type FlowKind, type PaymentMethod } from "@/lib/flo
 import { verifyTurnstile } from "@/lib/turnstile";
 import { verifyStoredDocument } from "@/lib/upload-verify";
 import { originAllowed, rateLimit, requestIp } from "@/lib/rate-limit";
+import { logAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -108,6 +109,15 @@ export async function POST(req: Request) {
 
   // Card → Stripe Checkout. Zelle/Cash → just return reference; webhook isn't
   // involved, attorney marks paid manually.
+  await logAudit({
+    action: "intake.submit",
+    actorId: user?.id ?? null,
+    actorEmail: user?.email ?? contact.email,
+    ip: requestIp(req.headers),
+    resource: `intake:${reference}`,
+    metadata: { kind, method, docCount: documents?.length ?? 0 },
+  });
+
   if (method === "card") {
     const origin = req.headers.get("origin") || "http://localhost:3000";
     const stripe = getStripe();

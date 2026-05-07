@@ -47,6 +47,34 @@
     "setNewPassword": "Set new password",
     "backToSignIn": "Back to sign in"
   },
+  "admin": {
+    "badge": "Attorney",
+    "title": "Intakes",
+    "sub": "Every submitted application — payment status, schedule, and the message thread with the client.",
+    "filters": { "all": "All", "awaiting": "Awaiting payment", "paid": "Paid", "refunded": "Refunded" },
+    "emptyH": "No intakes match this filter.",
+    "emptyS": "Try a different filter.",
+    "col": { "client": "Client", "filing": "Filing", "payment": "Payment", "schedule": "Schedule", "received": "Received", "callback": "Callback" },
+    "open": "Open",
+    "backToList": "Back to all intakes",
+    "statusH": "Payment + actions",
+    "answersH": "Eligibility answers",
+    "youSent": "You sent",
+    "fromClient": "From client",
+    "markPaid": "Mark paid",
+    "markPaidConfirm": "Mark this intake as paid? Use this for Zelle/cash after you've reconciled the transfer.",
+    "statusPaid": "Paid",
+    "refund": "Refund",
+    "refundCardConfirm": "Refund this card payment via Stripe? The funds will return to the client's card in 5–10 business days.",
+    "refundManualConfirm": "Mark this intake refunded? You'll need to send the Zelle/cash refund manually.",
+    "statusRefunded": "Refunded",
+    "reply": {
+      "subjectPh": "Subject (optional)",
+      "bodyPh": "Reply to the client…",
+      "send": "Send message",
+      "sending": "Sending…"
+    }
+  },
   "dashboard": {
     "title": "Your applications",
     "sub": "Status, schedule, documents, and any new attorney messages — all in one place.",

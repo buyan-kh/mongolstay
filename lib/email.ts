@@ -67,6 +67,62 @@ export async function sendClientConfirmation(input: ConfirmInput) {
   return resend.emails.send({ from: FROM, to: input.to, subject, text });
 }
 
+// Notification email to a client when an attorney posts a new message.
+// The body is included so the client can read it without logging in, but
+// the dashboard link is the authoritative source.
+export async function sendClientMessage(input: {
+  to: string;
+  clientName: string;
+  reference: string;
+  subject: string | null;
+  body: string;
+}) {
+  const resend = getResend();
+  const subjectLine = input.subject
+    ? `Mongolstay · ${input.subject} · ${input.reference}`
+    : `Mongolstay · New message · ${input.reference}`;
+  const text = [
+    `Hi ${input.clientName || "there"},`,
+    "",
+    `Your attorney sent you a message about ${input.reference}:`,
+    "",
+    input.subject ? `Subject: ${input.subject}` : null,
+    input.body,
+    "",
+    `Reply at: https://mongolstay.com/dashboard/${input.reference}`,
+    "",
+    "— Mongolstay",
+  ].filter(Boolean).join("\n");
+  return resend.emails.send({ from: FROM, to: input.to, subject: subjectLine, text });
+}
+
+// Notification email when an attorney refunds the case.
+export async function sendRefundConfirmation(input: {
+  to: string;
+  clientName: string;
+  reference: string;
+  amountUsd: number;
+  method: PaymentMethod;
+  reason?: string;
+}) {
+  const resend = getResend();
+  const subject = `Mongolstay · Refund issued · ${input.reference}`;
+  const text = [
+    `Hi ${input.clientName || "there"},`,
+    "",
+    input.method === "card"
+      ? `We've issued a refund of $${input.amountUsd.toLocaleString()} to the card you used. It usually arrives within 5–10 business days.`
+      : `We've recorded a refund of $${input.amountUsd.toLocaleString()}. Since you paid via ${METHOD_LABEL[input.method]}, our office will reach out separately to send the funds back.`,
+    "",
+    input.reason ? `Reason: ${input.reason}` : null,
+    "",
+    `Reference: ${input.reference}`,
+    "",
+    "— Mongolstay",
+  ].filter(Boolean).join("\n");
+  return resend.emails.send({ from: FROM, to: input.to, subject, text });
+}
+
 export async function sendAttorneyAlert(input: ConfirmInput) {
   const resend = getResend();
   const scheduleLine = formatScheduleLine(input.schedule);
