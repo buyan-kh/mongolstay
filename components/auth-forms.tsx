@@ -1,0 +1,161 @@
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
+import { getBrowserSupabase } from "@/lib/supabase/client";
+
+type FormState = { busy: boolean; error: string | null; notice: string | null };
+
+export function LoginForm({ next }: { next?: string }) {
+  const t = useTranslations("auth");
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [s, setS] = useState<FormState>({ busy: false, error: null, notice: null });
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setS({ busy: true, error: null, notice: null });
+    const supabase = getBrowserSupabase();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      setS({ busy: false, error: error.message, notice: null });
+      return;
+    }
+    router.push(next || "/dashboard");
+    router.refresh();
+  };
+
+  return (
+    <form className="auth-form" onSubmit={submit}>
+      <label className="field">
+        <span className="field-lbl">{t("email")}</span>
+        <input
+          className="ipt"
+          type="email"
+          required
+          autoComplete="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </label>
+      <label className="field">
+        <span className="field-lbl">{t("password")}</span>
+        <input
+          className="ipt"
+          type="password"
+          required
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </label>
+      {s.error && <div className="field-err" role="alert">{s.error}</div>}
+      {s.notice && <div className="field-hint" style={{ color: "var(--good)" }}>{s.notice}</div>}
+      <button type="submit" className="btn btn-accent btn-lg" disabled={s.busy}>
+        {s.busy ? t("workingSignIn") : t("signIn")}
+      </button>
+    </form>
+  );
+}
+
+export function SignupForm({ next }: { next?: string }) {
+  const t = useTranslations("auth");
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [s, setS] = useState<FormState>({ busy: false, error: null, notice: null });
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setS({ busy: true, error: null, notice: null });
+    const supabase = getBrowserSupabase();
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next || "/dashboard")}`,
+      },
+    });
+    if (error) {
+      setS({ busy: false, error: error.message, notice: null });
+      return;
+    }
+
+    // If a session was returned (email confirmation disabled), straight to dashboard.
+    if (data.session) {
+      router.push(next || "/dashboard");
+      router.refresh();
+      return;
+    }
+
+    // Otherwise email confirmation is required — tell the user to check inbox.
+    setS({ busy: false, error: null, notice: t("checkEmail") });
+  };
+
+  return (
+    <form className="auth-form" onSubmit={submit}>
+      <label className="field">
+        <span className="field-lbl">{t("name")}</span>
+        <input
+          className="ipt"
+          type="text"
+          required
+          autoComplete="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </label>
+      <label className="field">
+        <span className="field-lbl">{t("email")}</span>
+        <input
+          className="ipt"
+          type="email"
+          required
+          autoComplete="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <span className="field-hint">{t("signupEmailHint")}</span>
+      </label>
+      <label className="field">
+        <span className="field-lbl">{t("password")}</span>
+        <input
+          className="ipt"
+          type="password"
+          required
+          minLength={6}
+          autoComplete="new-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </label>
+      {s.error && <div className="field-err" role="alert">{s.error}</div>}
+      {s.notice && <div className="field-hint" style={{ color: "var(--good)" }}>{s.notice}</div>}
+      <button type="submit" className="btn btn-accent btn-lg" disabled={s.busy}>
+        {s.busy ? t("workingSignUp") : t("signUp")}
+      </button>
+    </form>
+  );
+}
+
+export function SignOutButton() {
+  const t = useTranslations("auth");
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const onClick = async () => {
+    setBusy(true);
+    await getBrowserSupabase().auth.signOut();
+    router.push("/");
+    router.refresh();
+  };
+  return (
+    <button type="button" className="btn btn-sm btn-ghost" onClick={onClick} disabled={busy}>
+      {busy ? "…" : t("signOut")}
+    </button>
+  );
+}
