@@ -214,6 +214,7 @@ h1.hero-h em{font-style:italic;color:var(--accent)}
 .flow-body{padding:8px 0 24px;min-height:300px}
 .flow-foot{padding:18px 0 0;border-top:1px solid var(--line);
   display:flex;align-items:center;gap:10px}
+.flow-foot-spacer{flex:1}
 .flow-hint{margin-top:18px;padding:10px 14px;border-radius:var(--r-md);
   background:color-mix(in oklab, var(--warn) 8%, transparent);
   border:1px solid color-mix(in oklab, var(--warn) 28%, transparent);
@@ -462,15 +463,130 @@ h1.hero-h em{font-style:italic;color:var(--accent)}
 
 .mono{font-family:var(--mono)}
 
+/* ── tablet (≤ 880px) ── */
 @media (max-width: 880px){
+  /* nav: drop the secondary links + status pill, tighten padding, allow wrap */
   .nav-links,.nav-cta{display:none}
-  .services{grid-template-columns:1fr}
-  .section-head{grid-template-columns:1fr;gap:16px}
-  .steps,.att-grid{grid-template-columns:1fr 1fr}
-  .wall{grid-template-columns:repeat(6,1fr)}
+  .nav-row{padding:12px 18px;gap:10px;flex-wrap:wrap}
+  .nav-row .btn-sm{padding:0 10px;font-size:12.5px}
+
+  /* hero */
+  .hero-grid{padding:48px 18px 24px;gap:24px}
+  h1.hero-h{font-size:clamp(40px,9vw,72px);line-height:1;margin:14px 0 18px;max-width:none}
+  .hero-sub{font-size:16px;line-height:1.45;max-width:none}
+  .hero-stats{gap:24px;margin-top:28px}
+  .stat-num{font-size:36px}
+  .stat-lbl{font-size:12.5px}
+
+  /* services */
+  .services{grid-template-columns:1fr;padding:24px 18px 56px;gap:14px}
+  .svc{padding:24px 22px 22px;min-height:0;gap:18px;border-radius:20px}
+  .svc h2{font-size:clamp(26px,6.5vw,36px)}
+  .svc-foot{flex-direction:column;align-items:flex-start;gap:14px}
+  .svc-cta{width:100%;justify-content:center;height:48px}
+
+  /* strip */
+  .strip-row{padding:16px 18px;gap:14px}
+  .strip-flags{font-size:13px}
+
+  /* generic section */
+  .section{padding:56px 18px}
+  .section-head{grid-template-columns:1fr;gap:14px;margin-bottom:28px;align-items:start}
+  .section-h{font-size:clamp(32px,7vw,44px)}
+  .section-sub{font-size:15px}
+
+  /* how-it-works */
+  .steps{grid-template-columns:1fr 1fr}
+  .step{padding:20px 18px;min-height:0;gap:10px}
+  .step h3{font-size:24px}
+
+  /* letter wall */
+  .wall{grid-template-columns:repeat(6,1fr);gap:10px}
   .letter-l,.letter-m{grid-column:span 3}
   .letter-s{grid-column:span 2}
-  .pay-grid{grid-template-columns:1fr}
-  .cta-row{grid-template-columns:1fr}
-  .footer-row{grid-template-columns:1fr}
+
+  /* attorneys grid (when restored) */
+  .att-grid{grid-template-columns:1fr 1fr}
+
+  /* CTA band */
+  .cta-row{grid-template-columns:1fr;padding:48px 18px;gap:24px}
+  .cta h2{max-width:none}
+  .cta-actions{flex-direction:column;align-items:stretch;gap:10px}
+  .cta-actions .btn{width:100%}
+
+  /* footer */
+  .footer-row{grid-template-columns:1fr;padding:32px 18px;gap:28px}
+  .footer-cols{grid-template-columns:1fr 1fr;gap:16px}
+
+  /* flow shell */
+  .flow-shell{padding:28px 18px 64px}
+  .flow-shell-bar{flex-wrap:wrap;gap:10px}
+  .flow-title{font-size:clamp(26px,7vw,34px)!important}
+  .flow-sub{font-size:14px}
+  .flow-foot{flex-direction:column-reverse;align-items:stretch;gap:10px}
+  .flow-foot .btn{width:100%}
+  .flow-foot-spacer{display:none}
+  .flow-progress-lbl{position:static;text-align:right;margin-top:12px}
+
+  /* schedule */
+  .sched-tabs{display:flex;width:100%}
+  .sched-tab{flex:1;justify-content:center}
+  .sched-contact .pay-row{grid-template-columns:1fr;gap:8px}
+  .appt-modes{grid-template-columns:1fr}
+  .appt-cal{padding:14px}
+  .appt-days{grid-template-columns:repeat(3,1fr)}
+  .appt-times{grid-template-columns:repeat(3,1fr)}
+  .callback-windows{grid-template-columns:1fr}
+
+  /* payment */
+  .pay-grid{grid-template-columns:1fr;gap:18px}
+  .pay-methods{grid-template-columns:1fr;gap:4px}
+  .pay-method{justify-content:flex-start;padding-left:14px;height:42px}
+  .pay-summary{order:-1}
+
+  /* eligibility — prevent option chips from squashing text */
+  .elig-opts{gap:6px}
+  .elig-opt{height:36px;padding:0 12px;font-size:13px}
+
+  /* documents */
+  .doc{padding:12px 14px}
+  .doc-name{font-size:13.5px}
+
+  /* dashboard */
+  .dash-bar{padding:12px 16px;gap:10px;flex-wrap:wrap}
+  .dash-main{padding:28px 16px 64px}
+  .dash-list{grid-template-columns:1fr}
+  .dash-card{padding:18px;gap:12px}
+  .dash-card-h{font-size:20px}
+  .dash-card-meta{grid-template-columns:1fr 1fr}
+  .dash-status-grid{grid-template-columns:1fr 1fr}
+  .dash-section{padding:18px}
+
+  /* auth */
+  .auth-page{padding:28px 16px}
+  .auth-card{padding:24px;border-radius:16px;max-width:none}
+  .auth-title{font-size:30px}
+
+  /* invoice */
+  .invoice-head{flex-direction:column;gap:12px}
+  .invoice-head-right{text-align:left}
+  .invoice-parties{grid-template-columns:1fr;gap:14px;padding:14px 0}
+  .invoice-payment-row{flex-direction:column;align-items:flex-start;gap:2px}
+  .invoice-payment-row span:last-child{font-weight:600}
+}
+
+/* ── small phone (≤ 480px) ── */
+@media (max-width: 480px){
+  h1.hero-h{font-size:38px;line-height:1}
+  .hero-stats{flex-direction:column;gap:16px;margin-top:24px}
+  .stat-num{font-size:32px}
+  .steps,.att-grid{grid-template-columns:1fr}
+  .footer-cols{grid-template-columns:1fr}
+  .dash-card-meta,.dash-status-grid{grid-template-columns:1fr}
+
+  /* keep sign-in/start-filing visible by hiding the lang switcher and "Sign out" first */
+  .nav-row .lang-switcher{display:none}
+
+  /* tighten input height a touch on tiny screens for stacked-form readability */
+  .ipt{height:42px;font-size:13.5px}
 }

@@ -98,7 +98,7 @@ export function FlowFooter({
       ) : (
         <span />
       )}
-      <div style={{ flex: 1 }} />
+      <div className="flow-foot-spacer" />
       {nextHref ? (
         <Link
           className={`btn btn-lg ${nextDisabled ? "btn-ghost" : "btn-accent"}`}
