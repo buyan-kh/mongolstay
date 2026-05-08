@@ -1,7 +1,7 @@
 {
   "site": {
     "title": "Mongolstay — Submit in 4 minutes. Pay. Done.",
-    "description": "Two visa filings, one click each. J-1 to F-1 change of status, $2,000 flat. Asylum applications, $4,000 flat. Licensed immigration attorneys included."
+    "description": "Three visa filings, one click each. J-1 → F-1 and B-1/B-2 → F-1 changes of status, $1,000 flat. Asylum applications, $3,000 flat. Licensed immigration attorneys included."
   },
   "nav": {
     "services": "Services",
@@ -177,7 +177,7 @@
       "body": "Stay in the U.S. as a student without leaving. We handle the I-539, the home-residency analysis, and the supporting legal brief.",
       "cta": "Change my status",
       "points": ["Currently in J-1 status", "I-539 + supporting brief", "Waiver strategy reviewed", "6 docs · 4 minutes"],
-      "price": "2,000",
+      "price": "1,000",
       "priceFootnote": "flat · attorney included"
     },
     "b1b2f1": {
@@ -187,7 +187,7 @@
       "body": "Visiting on a tourist or business visa and want to stay as a student? We file the I-539 and the supporting brief showing the change of intent.",
       "cta": "Change my status",
       "points": ["B-1 or B-2 visitor", "I-539 + intent brief", "Preconceived-intent analysis", "6 docs · 4 minutes"],
-      "price": "2,000",
+      "price": "1,000",
       "priceFootnote": "flat · attorney included"
     },
     "asylum": {
@@ -197,7 +197,7 @@
       "body": "If you fear returning to your country, we'll prepare your asylum application and stand with you through the interview. One year filing deadline applies.",
       "cta": "Apply for asylum",
       "points": ["Any current status", "I-589 prepared & filed", "Work permit guidance", "6 docs · 4 minutes"],
-      "price": "4,000",
+      "price": "3,000",
       "priceFootnote": "flat · attorney included"
     }
   },
@@ -214,7 +214,7 @@
       "01": { "h": "Eligibility",  "p": "Four quick questions. We tell you instantly whether to file and which form.",            "t": "~ 30 sec" },
       "02": { "h": "Documents",    "p": "Drag & drop your passport, I-94, I-20, financials. Missing one? We collect it later.",  "t": "~ 2 min" },
       "03": { "h": "Payment",      "p": "Flat fee, attorney review included. Refunded if our attorneys decline your case.",      "t": "~ 30 sec" },
-      "04": { "h": "Appointment",  "p": "Pick a 30-minute slot — Manhattan office or Zoom. Walk out with your filing.",          "t": "~ 1 min" }
+      "04": { "h": "Appointment",  "p": "Pick a 30-minute Zoom slot or request a callback. Walk away with your filing in motion.", "t": "~ 1 min" }
     }
   },
   "wins": {
@@ -233,12 +233,12 @@
   "ctaBand": {
     "hPre": "Three filings.",
     "hEm": "One click each.",
-    "j1f1": "Change J-1 → F-1 · $2,000",
-    "b1b2f1": "Change B-1/B-2 → F-1 · $2,000",
-    "asylum": "Apply for asylum · $4,000"
+    "j1f1": "Change J-1 → F-1 · $1,000",
+    "b1b2f1": "Change B-1/B-2 → F-1 · $1,000",
+    "asylum": "Apply for asylum · $3,000"
   },
   "footer": {
-    "address": "350 5th Avenue, Suite 4810 · New York, NY 10118",
+    "address": "388 Market Street, Suite 1300 · San Francisco, CA 94111",
     "fine": "© Mongolstay PLLC. Attorney advertising. Prior results do not guarantee similar outcomes.",
     "filings": "Filings",
     "j1f1": "J-1 → F-1",
@@ -247,7 +247,7 @@
     "firm": "Firm",
     "press": "Press",
     "office": "Office",
-    "manhattan": "Manhattan",
+    "manhattan": "San Francisco",
     "hours": "Hours",
     "languages": "Languages"
   },
@@ -290,21 +290,21 @@
     "titles": {
       "j1f1": {
         "eligibility": { "h": "Quick eligibility check.", "s": "A few questions. We'll know if J-1 → F-1 is the right path." },
-        "documents":   { "h": "Upload what you have.",    "s": "PDF, JPG, or PNG. Drop in whatever you can find — we collect the rest at your appointment." },
-        "schedule":    { "h": "Pick a time to meet.",     "s": "Book an in-person or video appointment, or request a callback. We'll confirm your contact info too." },
-        "payment":     { "h": "Pay $2,000 — flat.",       "s": "Card, Zelle, or cash at your appointment. Refunded if our attorneys decline your case after review." }
+        "documents":   { "h": "Upload what you have.",    "s": "PDF, JPG, or PNG. Drop in whatever you can find — we collect the rest after we start your case." },
+        "schedule":    { "h": "Pick a time to meet.",     "s": "Book a video appointment or request a callback. We'll confirm your contact info too." },
+        "payment":     { "h": "Pay $1,000 — flat.",       "s": "Cash today, card or Zelle once we send the link. Refunded if our attorneys decline your case after review." }
       },
       "b1b2f1": {
         "eligibility": { "h": "Quick eligibility check.", "s": "A few questions. We'll know if a B-1/B-2 → F-1 change is the right path." },
-        "documents":   { "h": "Upload what you have.",    "s": "PDF, JPG, or PNG. Drop in whatever you can find — we collect the rest at your appointment." },
-        "schedule":    { "h": "Pick a time to meet.",     "s": "Book an in-person or video appointment, or request a callback. We'll confirm your contact info too." },
-        "payment":     { "h": "Pay $2,000 — flat.",       "s": "Card, Zelle, or cash at your appointment. Refunded if our attorneys decline your case after review." }
+        "documents":   { "h": "Upload what you have.",    "s": "PDF, JPG, or PNG. Drop in whatever you can find — we collect the rest after we start your case." },
+        "schedule":    { "h": "Pick a time to meet.",     "s": "Book a video appointment or request a callback. We'll confirm your contact info too." },
+        "payment":     { "h": "Pay $1,000 — flat.",       "s": "Cash today, card or Zelle once we send the link. Refunded if our attorneys decline your case after review." }
       },
       "asylum": {
         "eligibility": { "h": "A few questions about your situation.", "s": "These determine your filing strategy. Nothing you say here is filed with USCIS." },
-        "documents":   { "h": "Upload what you have.",                 "s": "PDF, JPG, or PNG. Drop in whatever you can find — we collect the rest at your appointment." },
-        "schedule":    { "h": "Pick a time to meet.",                  "s": "Book an in-person or video appointment, or request a callback. We'll confirm your contact info too." },
-        "payment":     { "h": "Pay $4,000 — flat.",                    "s": "Card, Zelle, or cash at your appointment. Refunded if our attorneys decline your case after review." }
+        "documents":   { "h": "Upload what you have.",                 "s": "PDF, JPG, or PNG. Drop in whatever you can find — we collect the rest after we start your case." },
+        "schedule":    { "h": "Pick a time to meet.",                  "s": "Book a video appointment or request a callback. We'll confirm your contact info too." },
+        "payment":     { "h": "Pay $3,000 — flat.",                    "s": "Cash today, card or Zelle once we send the link. Refunded if our attorneys decline your case after review." }
       }
     },
     "elig": {
@@ -433,8 +433,8 @@
         "phone": "Phone"
       },
       "channel": {
-        "officeH": "In-person · Manhattan office",
-        "officeS": "350 5th Ave, Suite 4810 · 30 min",
+        "officeH": "In-person · San Francisco office",
+        "officeS": "Mission St, San Francisco · 30 min",
         "videoH": "Video call",
         "videoS": "Zoom link · 30 min"
       },
@@ -460,40 +460,46 @@
       }
     },
     "pay": {
-      "secured": "256-bit TLS · processed by Stripe · refunded if attorney declines case",
+      "secured": "256-bit TLS · attorney-client privilege · refunded if attorney declines case",
       "summary": "Order summary",
       "j1f1Line": "J-1 → F-1 change of status (I-539)",
       "b1b2f1Line": "B-1/B-2 → F-1 change of status (I-539)",
       "asylumLine": "Asylum application (I-589)",
       "uscisFee": "USCIS filing fee",
       "attorneyReview": "Attorney review",
-      "appointmentIncl": "In-person appointment",
+      "appointmentIncl": "Video consultation",
       "included": "included",
       "total": "Total today",
       "footFlat": "Flat fee. No hidden costs.",
-      "footAsylum": "Asylum filings have no USCIS fee.",
+      "footAsylum": "$100 USCIS filing fee included.",
+      "afterH": "What happens after you pay",
+      "afterBody": "We start your case the same day. If we need additional documents, your attorney will message you directly. Track every status change, message, and document upload from your dashboard.",
+      "afterStep1": "We open your file and assign your attorney.",
+      "afterStep2": "Any missing document? Your attorney messages you with what's needed.",
+      "afterStep3": "Track everything — status, attorney messages, uploaded files — from your dashboard.",
+      "afterCta": "Open dashboard",
       "methods": {
         "card": {
           "label": "Card",
-          "body": "Click \"Pay ${total}\" to enter card details on a secure Stripe page. You'll be returned here as soon as payment clears."
+          "body": "Card payment is coming online soon. For now please choose cash (in-person) — once you confirm, we'll send a secure card link by email if you'd prefer to pay that way."
         },
         "zelle": {
           "label": "Zelle",
-          "body": "Send ${total} via Zelle. Use the reference below as the memo so we can match your payment.",
-          "sendTo": "Send to",
-          "recipient": "Recipient",
+          "body": "Confirm with the reference below and we'll text you the Zelle handle to send ${total} to. We'll match your transfer to this filing automatically.",
+          "recipient": "Send to",
+          "recipientHidden": "Sent by text after you confirm",
           "amount": "Amount",
           "memo": "Memo / reference",
           "foot": "We'll mark your filing paid once we receive the transfer (usually within minutes).",
-          "cta": "I've sent it"
+          "cta": "Confirm — text me Zelle details"
         },
         "cash": {
-          "label": "Pay at appointment",
-          "body": "Bring ${total} in cash or a cashier's check to your appointment. We'll issue a printed receipt and start the filing.",
+          "label": "Cash (today)",
+          "body": "Bring ${total} in cash or a cashier's check to our office today. We'll print your receipt, open your file, and start your case while you're here.",
           "amount": "Bring",
           "reference": "Reference",
-          "foot": "Your filing is held in draft until payment is collected at your appointment.",
-          "cta": "Confirm — I'll pay at the appointment"
+          "foot": "Cash is the fastest way to start right now — we'll have your file open the moment you walk in.",
+          "cta": "Confirm — I'll pay in cash"
         }
       }
     },
@@ -512,8 +518,8 @@
       "status": "Status",
       "statusPaid": "Paid",
       "statusAwaiting": "Awaiting payment",
-      "zelleNote": "Send via Zelle to {email}, memo \"{memo}\". We'll mark this paid on receipt.",
-      "cashNote": "Bring this invoice and reference {reference} to your appointment.",
+      "zelleNote": "We'll text you the Zelle handle. Send the amount with memo \"{memo}\" — we'll mark this paid on receipt.",
+      "cashNote": "Bring this invoice and reference {reference} when you come in.",
       "foot": "Mongolstay PLLC. Attorney advertising. Refundable if attorneys decline the case after review.",
       "print": "Print invoice"
     },
