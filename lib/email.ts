@@ -96,6 +96,32 @@ export async function sendClientMessage(input: {
   return resend.emails.send({ from: FROM, to: input.to, subject: subjectLine, text });
 }
 
+// Notification email to the attorney inbox when a client sends a message
+// from their dashboard. Mirrors sendClientMessage but the other direction.
+export async function sendAttorneyMessageAlert(input: {
+  reference: string;
+  clientName: string;
+  clientEmail: string;
+  subject: string | null;
+  body: string;
+  attachmentCount: number;
+}) {
+  const resend = getResend();
+  const subjectLine = input.subject
+    ? `[Client] ${input.subject} · ${input.reference}`
+    : `[Client] New message · ${input.reference}`;
+  const text = [
+    `New message from ${input.clientName} <${input.clientEmail}> on ${input.reference}:`,
+    "",
+    input.subject ? `Subject: ${input.subject}` : null,
+    input.body,
+    input.attachmentCount > 0 ? `\nAttachments: ${input.attachmentCount}` : null,
+    "",
+    `Reply at: https://mongolstay.com/admin/${input.reference}`,
+  ].filter(Boolean).join("\n");
+  return resend.emails.send({ from: FROM, to: ATTORNEY_INBOX, subject: subjectLine, text });
+}
+
 // Notification email when an attorney refunds the case.
 export async function sendRefundConfirmation(input: {
   to: string;

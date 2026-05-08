@@ -61,6 +61,18 @@ export type IntakeMessageRow = {
 
 export type IntakeMessageInsert = Omit<IntakeMessageRow, "id" | "created_at">;
 
+export type IntakeMessageAttachmentRow = {
+  id: string;
+  created_at: string;
+  message_id: string;
+  storage_path: string;
+  original_filename: string | null;
+  mime_type: string | null;
+  size_bytes: number | null;
+};
+
+export type IntakeMessageAttachmentInsert = Omit<IntakeMessageAttachmentRow, "id" | "created_at">;
+
 export type ProfileRow = {
   id: string;
   created_at: string;
@@ -87,6 +99,7 @@ export type Database = {
       intakes: { Row: IntakeRow; Insert: IntakeInsert; Update: IntakeUpdate; Relationships: [] };
       intake_documents: { Row: IntakeDocumentRow; Insert: IntakeDocumentInsert; Update: Partial<IntakeDocumentRow>; Relationships: [] };
       intake_messages: { Row: IntakeMessageRow; Insert: IntakeMessageInsert; Update: Partial<IntakeMessageRow>; Relationships: [] };
+      intake_message_attachments: { Row: IntakeMessageAttachmentRow; Insert: IntakeMessageAttachmentInsert; Update: Partial<IntakeMessageAttachmentRow>; Relationships: [] };
       profiles: { Row: ProfileRow; Insert: Partial<ProfileRow> & { id: string }; Update: Partial<ProfileRow>; Relationships: [] };
       audit_events: { Row: AuditEventRow; Insert: AuditEventInsert; Update: Partial<AuditEventRow>; Relationships: [] };
     };

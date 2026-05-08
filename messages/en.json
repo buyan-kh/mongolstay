@@ -75,8 +75,59 @@
       "sending": "Sending…"
     }
   },
+  "dashboardNav": {
+    "aria": "Dashboard navigation",
+    "filings": "Filings",
+    "messages": "Messages",
+    "documents": "Documents",
+    "profile": "Profile"
+  },
+  "messagesPage": {
+    "title": "Messages",
+    "sub": "Conversations with your attorney, organized by filing.",
+    "emptyH": "No conversations yet.",
+    "emptyS": "When your attorney reaches out, the message will show up here.",
+    "noMessages": "No messages yet — your attorney will reach out after reviewing your file.",
+    "backToList": "Back to all messages",
+    "threadSub": "Thread on filing"
+  },
+  "documentsPage": {
+    "title": "Documents",
+    "sub": "{count, plural, one {# uploaded file} other {# uploaded files}} across all your filings.",
+    "emptyH": "No documents yet.",
+    "emptyS": "Files you upload during a filing will appear here."
+  },
+  "profilePage": {
+    "title": "Profile",
+    "sub": "Your account details and password.",
+    "identityH": "Account",
+    "passwordH": "Change password",
+    "emailHint": "Contact us to change your email.",
+    "saveName": "Save",
+    "savePw": "Update password",
+    "saving": "Saving…",
+    "savedName": "Name updated.",
+    "savedPw": "Password updated."
+  },
+  "chat": {
+    "empty": "No messages yet. Drop the first one to your attorney below.",
+    "fromAttorney": "From your attorney",
+    "fromClient": "From client",
+    "youSent": "You sent",
+    "phClient": "Write to your attorney…",
+    "phAttorney": "Reply to the client…",
+    "send": "Send",
+    "sending": "Sending…",
+    "attach": "Attach files",
+    "uploading": "uploading…",
+    "hint": "Cmd/Ctrl + Enter to send. PDF/JPG/PNG/WebP up to 10MB each.",
+    "errorType": "Unsupported file type.",
+    "errorSize": "File over 10MB.",
+    "errorUpload": "Upload failed — try again.",
+    "errorWait": "Wait for uploads to finish before sending."
+  },
   "dashboard": {
-    "title": "Your applications",
+    "title": "Your filings",
     "sub": "Status, schedule, documents, and any new attorney messages — all in one place.",
     "emptyH": "No applications yet.",
     "emptyS": "Start a filing — your status will show up here as soon as you submit.",
@@ -91,6 +142,9 @@
     "statusH": "Status",
     "scheduleH": "Schedule",
     "messagesH": "Messages",
+    "messagesPreview": "Open the chat thread to send a message or attach a file.",
+    "openChat": "Open chat",
+    "seeAll": "See all",
     "documentsH": "Documents",
     "noMessages": "No messages yet. Your attorney will reach out here once they review your file.",
     "fromAttorney": "From your attorney",

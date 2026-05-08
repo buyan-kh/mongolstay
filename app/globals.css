@@ -429,6 +429,60 @@ h1.hero-h em{font-style:italic;color:var(--accent)}
 .dash-doc{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md);font-size:13.5px}
 .dash-doc a:hover{text-decoration:underline}
 
+/* ── dashboard layout (sidebar + main) ── */
+.dlayout{min-height:100vh;display:flex;flex-direction:column;background:var(--bg-2)}
+.dlayout-email{color:var(--muted);font-size:13px}
+.dlayout-body{flex:1;display:grid;grid-template-columns:240px 1fr;max-width:1200px;margin:0 auto;width:100%;padding:24px 24px 64px;gap:32px}
+.dlayout-side{position:sticky;top:80px;align-self:start}
+.dlayout-main{min-width:0}
+
+.dnav{display:flex;flex-direction:column;gap:2px}
+.dnav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:14px;color:var(--muted);font-weight:500;transition:background .12s ease, color .12s ease}
+.dnav-item:hover{color:var(--ink);background:var(--bg)}
+.dnav-item.sel{background:var(--ink);color:var(--bg)}
+.dnav-item.sel:hover{background:var(--ink-2)}
+.dnav-badge{margin-left:auto;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;line-height:1.4}
+.dnav-item.sel .dnav-badge{background:var(--bg);color:var(--ink)}
+
+/* ── chat ── */
+.chat{display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;height:calc(100vh - 280px);min-height:480px}
+.chat-thread{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;background:var(--bg-2)}
+.chat-row{display:flex;width:100%}
+.chat-row-left{justify-content:flex-start}
+.chat-row-right{justify-content:flex-end}
+.chat-bubble{max-width:560px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;flex-direction:column;gap:6px}
+.chat-row-right .chat-bubble{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chat-row-right .chat-bubble .chat-meta{color:color-mix(in oklab, var(--bg) 60%, transparent)}
+.chat-row-right .chat-bubble .chat-time{color:color-mix(in oklab, var(--bg) 50%, transparent)}
+.chat-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;gap:14px}
+.chat-time{font-weight:400}
+.chat-subject{font-weight:600;font-size:13.5px}
+.chat-body{font-size:14px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.chat-attachments{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.chat-attachment{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--ink);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-attachment:hover{background:var(--bg)}
+.chat-row-right .chat-attachment{background:color-mix(in oklab, var(--bg) 18%, var(--ink));border-color:color-mix(in oklab, var(--bg) 30%, var(--ink));color:var(--bg)}
+
+.chat-composer{padding:12px;border-top:1px solid var(--line);background:var(--bg);display:flex;flex-direction:column;gap:8px}
+.chat-row-fields{display:flex;align-items:flex-end;gap:8px}
+.chat-input{flex:1;height:auto;min-height:42px;padding:10px 12px;font-size:14px;line-height:1.5;resize:vertical}
+.chat-attach{height:42px;width:42px;padding:0;flex-shrink:0}
+.chat-staged{display:flex;flex-direction:column;gap:4px}
+.chat-staged-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--ink-2)}
+.chat-remove{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.chat-remove:hover{background:var(--bg);color:var(--ink)}
+.chat-hint{font-size:11.5px;color:var(--muted)}
+
+@media (max-width:880px){
+  .dlayout-body{grid-template-columns:1fr;padding:16px;gap:14px}
+  .dlayout-side{position:static;order:2}
+  .dnav{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .dnav-item{flex-shrink:0}
+  .chat{height:auto;min-height:0}
+  .chat-thread{max-height:60vh}
+  .chat-bubble{max-width:88%}
+}
+
 /* ── admin (attorney panel) ── */
 .admin-filters{display:inline-flex;padding:3px;background:var(--bg);border:1px solid var(--line);border-radius:10px;gap:3px;margin-bottom:18px}
 .admin-filter{display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:7px;font-size:13px;font-weight:500;color:var(--muted)}

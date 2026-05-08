@@ -1,9 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Icon, BrandMark } from "@/components/icons";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { SignOutButton } from "@/components/auth-forms";
-import { requireUser } from "@/lib/auth";
+import { Icon } from "@/components/icons";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 type IntakeListRow = {
@@ -22,14 +19,11 @@ type IntakeListRow = {
 };
 
 export default async function Page() {
-  const user = await requireUser("/login?next=/dashboard");
   const supabase = await getServerSupabase();
   const t = await getTranslations("dashboard");
   const tPay = await getTranslations("flow.pay");
   const tInv = await getTranslations("flow.invoice");
 
-  // RLS limits this to intakes where client_user_id = auth.uid().
-  // Pull message counts for the unread badge in one query.
   const { data: intakes } = await supabase
     .from("intakes")
     .select(`
@@ -42,103 +36,80 @@ export default async function Page() {
   const list = (intakes ?? []) as unknown as IntakeListRow[];
 
   return (
-    <div className="dash">
-      <header className="dash-bar">
-        <Link className="brand" href="/">
-          <BrandMark />
-          <span>mongolstay<span style={{ color: "var(--muted)", fontWeight: 400 }}>.com</span></span>
-        </Link>
-        <div style={{ flex: 1 }} />
-        <LanguageSwitcher />
-        <span style={{ color: "var(--muted)", fontSize: 13 }}>{user.email}</span>
-        <SignOutButton />
-      </header>
+    <>
+      <div className="dash-head">
+        <h1 className="flow-title">{t("title")}</h1>
+        <p className="flow-sub">{t("sub")}</p>
+      </div>
 
-      <main className="dash-main">
-        <div className="dash-head">
-          <h1 className="flow-title">{t("title")}</h1>
-          <p className="flow-sub">{t("sub")}</p>
+      {list.length === 0 ? (
+        <div className="dash-empty">
+          <p className="dash-empty-h">{t("emptyH")}</p>
+          <p className="dash-empty-s">{t("emptyS")}</p>
+          <div className="dash-empty-cta">
+            <Link className="btn btn-lg btn-accent" href="/file/j1f1/eligibility">
+              {t("startJ1F1")} <Icon.ArrowRight style={{ width: 14, height: 14 }} />
+            </Link>
+            <Link className="btn btn-lg btn-ghost" href="/file/asylum/eligibility">
+              {t("startAsylum")} <Icon.ArrowRight style={{ width: 14, height: 14 }} />
+            </Link>
+          </div>
         </div>
+      ) : (
+        <div className="dash-list">
+          {list.map((it) => {
+            const incoming = (it.intake_messages ?? []).filter((m) => m.direction === "in");
+            const unread = incoming.filter((m) => !m.read_at).length;
+            const filing = it.kind === "asylum" ? "I-589" : "I-539";
+            const filingLabel = tPay(`${it.kind}Line`);
+            const statusLabel =
+              it.payment_status === "paid"
+                ? tInv("statusPaid")
+                : it.payment_status === "awaiting"
+                ? tInv("statusAwaiting")
+                : it.payment_status;
 
-        {list.length === 0 ? (
-          <div className="dash-empty">
-            <p className="dash-empty-h">{t("emptyH")}</p>
-            <p className="dash-empty-s">{t("emptyS")}</p>
-            <div className="dash-empty-cta">
-              <Link className="btn btn-lg btn-accent" href="/file/j1f1/eligibility">
-                {t("startJ1F1")} <Icon.ArrowRight style={{ width: 14, height: 14 }} />
-              </Link>
-              <Link className="btn btn-lg btn-ghost" href="/file/asylum/eligibility">
-                {t("startAsylum")} <Icon.ArrowRight style={{ width: 14, height: 14 }} />
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <div className="dash-list">
-            {list.map((it) => {
-              const incoming = (it.intake_messages ?? []).filter((m) => m.direction === "in");
-              const unread = incoming.filter((m) => !m.read_at).length;
-              const filing = it.kind === "asylum" ? "I-589" : "I-539";
-              const filingLabel = tPay(`${it.kind}Line`);
-              const statusLabel =
-                it.payment_status === "paid"
-                  ? tInv("statusPaid")
-                  : it.payment_status === "awaiting"
-                  ? tInv("statusAwaiting")
-                  : it.payment_status;
-
-              return (
-                <Link
-                  key={it.id}
-                  className="dash-card"
-                  href={`/dashboard/${it.reference}`}
-                >
-                  <div className="dash-card-head">
-                    <div className="dash-card-tag">
-                      <span
-                        className="sq"
-                        style={{
-                          background:
-                            it.kind === "asylum" ? "var(--accent)" :
-                            it.kind === "b1b2f1" ? "var(--ink-2)" :
-                            "var(--ink)",
-                        }}
-                      />
-                      {filing}
-                    </div>
-                    {unread > 0 && (
-                      <span className="dash-badge">
-                        {t("unread", { count: unread })}
-                      </span>
-                    )}
+            return (
+              <Link key={it.id} className="dash-card" href={`/dashboard/${it.reference}`}>
+                <div className="dash-card-head">
+                  <div className="dash-card-tag">
+                    <span
+                      className="sq"
+                      style={{
+                        background:
+                          it.kind === "asylum" ? "var(--accent)" :
+                          it.kind === "b1b2f1" ? "var(--ink-2)" :
+                          "var(--ink)",
+                      }}
+                    />
+                    {filing}
                   </div>
-                  <div className="dash-card-h">{filingLabel}</div>
-                  <div className="dash-card-meta">
-                    <div>
-                      <span className="dash-card-lbl">{t("reference")}</span>
-                      <span className="mono">{it.reference}</span>
-                    </div>
-                    <div>
-                      <span className="dash-card-lbl">{t("status")}</span>
-                      <span
-                        className={`dash-status dash-status-${it.payment_status}`}
-                      >
-                        {statusLabel}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="dash-card-lbl">{t("amount")}</span>
-                      <span className="mono">
-                        ${(((it.amount_cents as number) ?? 0) / 100).toLocaleString()}.00
-                      </span>
-                    </div>
+                  {unread > 0 && (
+                    <span className="dash-badge">
+                      {t("unread", { count: unread })}
+                    </span>
+                  )}
+                </div>
+                <div className="dash-card-h">{filingLabel}</div>
+                <div className="dash-card-meta">
+                  <div>
+                    <span className="dash-card-lbl">{t("reference")}</span>
+                    <span className="mono">{it.reference}</span>
                   </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
-      </main>
-    </div>
+                  <div>
+                    <span className="dash-card-lbl">{t("status")}</span>
+                    <span className={`dash-status dash-status-${it.payment_status}`}>{statusLabel}</span>
+                  </div>
+                  <div>
+                    <span className="dash-card-lbl">{t("amount")}</span>
+                    <span className="mono">${(((it.amount_cents as number) ?? 0) / 100).toLocaleString()}.00</span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 }
