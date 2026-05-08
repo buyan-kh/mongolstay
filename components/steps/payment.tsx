@@ -9,8 +9,10 @@ import { useFlow } from "@/components/flow-provider";
 import { useRouter } from "@/i18n/navigation";
 import { PRICES, type PaymentMethod } from "@/lib/flow-data";
 
-const ZELLE_EMAIL = process.env.NEXT_PUBLIC_ZELLE_EMAIL || "pay@mongolstay.com";
-const ZELLE_NAME = process.env.NEXT_PUBLIC_ZELLE_NAME || "Mongolstay PLLC";
+// Zelle handle is intentionally not embedded in the page until we have a real
+// recipient — when empty, the UI tells the client we'll text it after they
+// confirm. Set NEXT_PUBLIC_ZELLE_EMAIL to surface it.
+const ZELLE_EMAIL = process.env.NEXT_PUBLIC_ZELLE_EMAIL ?? "";
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 export function PaymentStep() {
@@ -25,7 +27,8 @@ export function PaymentStep() {
   const total = fee + uscisFee;
   const totalStr = total.toLocaleString();
 
-  const method: PaymentMethod = state.payment.method ?? "card";
+  // Cash is the primary path until Stripe leaves sandbox.
+  const method: PaymentMethod = state.payment.method ?? "cash";
   const setMethod = (m: PaymentMethod) =>
     setState((s) => ({ ...s, payment: { ...s.payment, method: m } }));
 
@@ -111,7 +114,7 @@ export function PaymentStep() {
         <div className="pay-grid">
           <div className="pay-form">
             <div className="pay-methods" role="tablist">
-              {(["card", "zelle", "cash"] as PaymentMethod[]).map((m) => (
+              {(["cash", "zelle", "card"] as PaymentMethod[]).map((m) => (
                 <button
                   key={m}
                   type="button"
@@ -142,12 +145,14 @@ export function PaymentStep() {
                 <p>{t("methods.zelle.body", { total: totalStr })}</p>
                 <div className="pay-instruction">
                   <div className="pay-instruction-row">
-                    <span className="pay-instruction-lbl">{t("methods.zelle.sendTo")}</span>
-                    <span className="mono">{ZELLE_EMAIL}</span>
-                  </div>
-                  <div className="pay-instruction-row">
                     <span className="pay-instruction-lbl">{t("methods.zelle.recipient")}</span>
-                    <span>{ZELLE_NAME}</span>
+                    {ZELLE_EMAIL ? (
+                      <span className="mono">{ZELLE_EMAIL}</span>
+                    ) : (
+                      <span style={{ color: "var(--muted)", fontStyle: "italic" }}>
+                        {t("methods.zelle.recipientHidden")}
+                      </span>
+                    )}
                   </div>
                   <div className="pay-instruction-row">
                     <span className="pay-instruction-lbl">{t("methods.zelle.amount")}</span>
@@ -220,6 +225,27 @@ export function PaymentStep() {
               {t("footFlat")} {kind === "asylum" ? t("footAsylum") : ""}
             </div>
           </div>
+        </div>
+
+        <div className="pay-after">
+          <div className="pay-after-h">{t("afterH")}</div>
+          <ol className="pay-after-steps">
+            <li>
+              <span className="pay-after-n">1</span>
+              <span>{t("afterStep1")}</span>
+            </li>
+            <li>
+              <span className="pay-after-n">2</span>
+              <span>{t("afterStep2")}</span>
+            </li>
+            <li>
+              <span className="pay-after-n">3</span>
+              <span>{t("afterStep3")}</span>
+            </li>
+          </ol>
+          <a className="pay-after-cta" href="/dashboard">
+            {t("afterCta")} <Icon.ArrowRight style={{ width: 12, height: 12 }} />
+          </a>
         </div>
       </div>
 

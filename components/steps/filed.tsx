@@ -6,8 +6,9 @@ import { useFlow } from "@/components/flow-provider";
 import { Link } from "@/i18n/navigation";
 import { PRICES } from "@/lib/flow-data";
 
-const ZELLE_EMAIL = process.env.NEXT_PUBLIC_ZELLE_EMAIL || "pay@mongolstay.com";
-const OFFICE_ADDRESS = process.env.NEXT_PUBLIC_OFFICE_ADDRESS || "350 5th Avenue, Suite 4810, New York, NY 10118";
+// Zelle handle is sent to the client by SMS once they confirm — we don't put a
+// placeholder address on the printable invoice yet.
+const OFFICE_ADDRESS = process.env.NEXT_PUBLIC_OFFICE_ADDRESS || "388 Market Street, Suite 1300, San Francisco, CA 94111";
 const FIRM_NAME = "Mongolstay PLLC";
 
 export function FiledStep() {
@@ -183,7 +184,7 @@ export function FiledStep() {
           </div>
           {method === "zelle" && status !== "paid" && (
             <div className="invoice-payment-note">
-              {tInv("zelleNote", { email: ZELLE_EMAIL, memo: reference })}
+              {tInv("zelleNote", { memo: reference })}
             </div>
           )}
           {method === "cash" && status !== "paid" && (
