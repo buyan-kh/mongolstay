@@ -312,6 +312,18 @@
       "verdictS_j1f1": "Based on your answers, we'll prepare an I-539 change of status petition. A licensed attorney will review before filing.",
       "verdictS_b1b2f1": "Based on your answers, we'll prepare an I-539 change of status petition with a supporting brief showing your change of intent. A licensed attorney will review before filing.",
       "verdictS_asylum": "Based on your answers, we'll prepare an I-589 asylum application. A licensed attorney will review before filing.",
+      "ineligibleH": "This filing won't work for you yet.",
+      "ineligibleS": "Based on what you've told us, USCIS will deny a change-of-status petition. Here's why:",
+      "ineligibleNote": "If your situation has details we haven't captured here,",
+      "ineligibleCta": "request a callback",
+      "reasons": {
+        "notInUS": "You must be physically inside the U.S. to file a change of status. From abroad, you'll apply for the visa at a U.S. consulate instead.",
+        "j1Expired": "Your J-1 status has expired. USCIS won't approve a change of status once you're already out of status.",
+        "dsExpired": "Your DS-2019 has already expired. USCIS denies I-539 petitions when the underlying program has lapsed.",
+        "waiverNeeded": "The 2-year home residency requirement (212(e)) blocks change of status. You need a waiver first, or to return home for two years before changing status.",
+        "i94Expired": "Your I-94 has already expired — you're out of authorized stay. Change of status requires a valid I-94 on the day USCIS receives your I-539.",
+        "preconceivedIntent": "Telling USCIS you intended to study when you entered on B-1/B-2 typically results in a denial for misrepresentation. We'd need a different strategy."
+      },
       "questions": {
         "j1f1": {
           "inUS":      {
@@ -338,7 +350,14 @@
           "i20":       {
             "q": "Do you have an I-20 from a SEVP-approved school?",
             "opts": ["Yes", "Not yet", "In progress"],
-            "hint": "The I-20 is issued by your future U.S. school after you're admitted and they've reviewed your financial documents. Without it we can't file the I-539 — we'll help you get it if needed."
+            "hint": "The I-20 is issued by your future U.S. school after you're admitted and they've reviewed your financial documents.",
+            "note": "(If you don't have one yet, we'll help you obtain it before filing — same flat fee.)"
+          },
+          "sevisPaid": {
+            "q": "Have you already paid the SEVIS I-901 fee ($350)?",
+            "opts": ["Yes — already paid", "Not yet", "Unsure"],
+            "hint": "SEVIS I-901 is the $350 fee paid to the U.S. Student and Exchange Visitor Program. It must be paid before USCIS approves your F-1 status.",
+            "note": "(If you haven't paid yet, we'll handle it for you before filing — same flat fee.)"
           },
           "funds":     {
             "q": "Can you show proof of funds for at least one year?",
@@ -371,7 +390,14 @@
           "i20":            {
             "q": "Do you have an I-20 from a SEVP-approved school?",
             "opts": ["Yes", "Not yet", "In progress"],
-            "hint": "The I-20 is issued by your future U.S. school after admission. Without it we can't file the I-539 — we'll help you get one if needed."
+            "hint": "The I-20 is issued by your future U.S. school after admission.",
+            "note": "(If you don't have one yet, we'll help you obtain it before filing — same flat fee.)"
+          },
+          "sevisPaid":      {
+            "q": "Have you already paid the SEVIS I-901 fee ($350)?",
+            "opts": ["Yes — already paid", "Not yet", "Unsure"],
+            "hint": "SEVIS I-901 is the $350 fee paid to the U.S. Student and Exchange Visitor Program. It must be paid before USCIS approves your F-1 status.",
+            "note": "(If you haven't paid yet, we'll handle it for you before filing — same flat fee.)"
           },
           "funds":          {
             "q": "Can you show proof of funds for at least one year?",
@@ -392,6 +418,7 @@
     "docs": {
       "bannerH": "Encrypted & attorney-reviewed",
       "bannerS": "Files are stored under attorney–client privilege. We'll request anything missing in your appointment.",
+      "weHandleH": "We're handling these for you — no upload needed:",
       "skipPre": "Don't have everything? ",
       "skipLink": "Skip — we'll collect the rest in your appointment",
       "progress": "{count} of {total} uploaded",

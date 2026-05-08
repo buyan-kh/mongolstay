@@ -242,6 +242,22 @@ h1.hero-h em{font-style:italic;color:var(--accent)}
   border-radius:var(--r-md);padding:14px 16px}
 .elig-verdict-h{font-weight:600;font-size:14.5px;color:var(--ink)}
 .elig-verdict-s{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+.elig-block{margin-top:8px;display:flex;gap:14px;align-items:flex-start;
+  background:color-mix(in oklab, var(--warn) 8%, transparent);
+  border:1px solid color-mix(in oklab, var(--warn) 35%, transparent);
+  border-radius:var(--r-md);padding:14px 16px}
+.elig-block-h{font-weight:600;font-size:14.5px;color:var(--ink)}
+.elig-block-s{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+.elig-block-list{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:8px}
+.elig-block-list li{font-size:13px;color:var(--ink);line-height:1.5;
+  padding-left:14px;position:relative}
+.elig-block-list li::before{content:"";position:absolute;left:0;top:8px;
+  width:6px;height:6px;border-radius:50%;background:var(--warn)}
+.elig-block-foot{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5}
+.elig-block-link{color:var(--accent);font-weight:600;
+  border-bottom:1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+  padding-bottom:1px;text-decoration:none}
+.elig-block-link:hover{border-bottom-color:var(--accent)}
 
 /* ── docs ── */
 .docs{display:flex;flex-direction:column;gap:16px}
@@ -249,6 +265,12 @@ h1.hero-h em{font-style:italic;color:var(--accent)}
   border:1px solid color-mix(in oklab, var(--accent) 25%, transparent);border-radius:var(--r-md);padding:12px 14px;align-items:flex-start}
 .docs-banner-h{font-size:13.5px;font-weight:600;color:var(--ink)}
 .docs-banner-s{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.4}
+.docs-handled{display:flex;gap:12px;background:color-mix(in oklab, var(--good) 7%, transparent);
+  border:1px solid color-mix(in oklab, var(--good) 30%, transparent);
+  border-radius:var(--r-md);padding:12px 14px;align-items:flex-start}
+.docs-handled-h{font-size:13.5px;font-weight:600;color:var(--ink)}
+.docs-handled-list{font-size:13px;color:var(--ink);margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.docs-handled-list li{line-height:1.4}
 .docs-list{display:flex;flex-direction:column;gap:8px}
 .doc{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--r-md);
   background:var(--bg-2);border:1px dashed var(--line);transition:all .15s ease}

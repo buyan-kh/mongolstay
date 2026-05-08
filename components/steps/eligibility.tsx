@@ -1,10 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Icon } from "@/components/icons";
 import { FlowFooter } from "@/components/flow-shell";
 import { useFlow } from "@/components/flow-provider";
-import { QUESTION_IDS } from "@/lib/flow-data";
+import { DISQUALIFIERS, QUESTION_IDS } from "@/lib/flow-data";
 
 export function EligibilityStep() {
   const { kind, state, setState } = useFlow();
@@ -31,8 +32,20 @@ export function EligibilityStep() {
     if (q.multi) return n + (Array.isArray(a) && a.length > 0 ? 1 : 0);
     return n + (a ? 1 : 0);
   }, 0);
-  // Allow advancing when all but one question is answered.
-  const canNext = answeredCount >= Math.max(3, questions.length - 1);
+
+  // Walk every disqualifier — if the user picked the offending option index
+  // for a question, surface that reason. We compare by index (resolved against
+  // the localized opts array) so this works in both EN and MN.
+  const triggered = DISQUALIFIERS[kind].filter((d) => {
+    const opts = (t.raw(`questions.${kind}.${d.qid}.opts`) as string[]) ?? [];
+    const offending = opts[d.optionIdx];
+    return offending && state.answers[d.qid] === offending;
+  });
+  const ineligible = triggered.length > 0;
+
+  // Continue is allowed only when no disqualifier is hit AND we have enough
+  // answers to be confident.
+  const canNext = !ineligible && answeredCount >= Math.max(3, questions.length - 1);
 
   return (
     <>
@@ -76,7 +89,26 @@ export function EligibilityStep() {
           );
         })}
 
-        {canNext && (
+        {ineligible ? (
+          <div className="elig-block" role="alert">
+            <div><Icon.Lock style={{ width: 22, height: 22, color: "var(--warn)" }} /></div>
+            <div>
+              <div className="elig-block-h">{t("ineligibleH")}</div>
+              <div className="elig-block-s">{t("ineligibleS")}</div>
+              <ul className="elig-block-list">
+                {triggered.map((d) => (
+                  <li key={d.qid}>{t(`reasons.${d.reasonKey}`)}</li>
+                ))}
+              </ul>
+              <div className="elig-block-foot">
+                {t("ineligibleNote")}{" "}
+                <Link href={`/file/${kind}/schedule`} className="elig-block-link">
+                  {t("ineligibleCta")} →
+                </Link>
+              </div>
+            </div>
+          </div>
+        ) : canNext ? (
           <div className="elig-verdict">
             <div><Icon.CheckCircle style={{ width: 22, height: 22, color: "var(--good)" }} /></div>
             <div>
@@ -86,7 +118,7 @@ export function EligibilityStep() {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
 
       <FlowFooter

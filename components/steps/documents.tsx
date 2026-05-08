@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Icon } from "@/components/icons";
 import { FlowFooter } from "@/components/flow-shell";
 import { useFlow, type UploadedDoc } from "@/components/flow-provider";
-import { DOC_IDS } from "@/lib/flow-data";
+import { CONDITIONAL_DOCS, DOC_IDS } from "@/lib/flow-data";
 
 type RowStatus = "idle" | "uploading" | "done";
 
@@ -141,8 +141,26 @@ function DocRow({
 export function DocumentsStep() {
   const { kind, state, setState } = useFlow();
   const t = useTranslations("flow.docs");
+  const tElig = useTranslations("flow.elig");
   const tBtn = useTranslations("flow.buttons");
-  const docIds = DOC_IDS[kind];
+
+  // Filter out docs the user said they don't have yet (I-20, SEVIS receipt).
+  // We'll handle those for them — same flat fee.
+  const { docIds, weHandle } = useMemo(() => {
+    const handled: string[] = [];
+    const filtered = DOC_IDS[kind].filter((id) => {
+      const cond = CONDITIONAL_DOCS[id as keyof typeof CONDITIONAL_DOCS];
+      if (!cond) return true;
+      const opts = (tElig.raw(`questions.${kind}.${cond.qid}.opts`) as string[] | undefined) ?? [];
+      const answer = state.answers[cond.qid];
+      const idx = typeof answer === "string" ? opts.indexOf(answer) : -1;
+      const skip = idx >= 0 && cond.skipIfIdx.includes(idx);
+      if (skip) handled.push(id);
+      return !skip;
+    });
+    return { docIds: filtered, weHandle: handled };
+  }, [kind, state.answers, tElig]);
+
   const uploadedCount = docIds.filter((id) => state.uploadedDocs.includes(id)).length;
   const canNext = uploadedCount >= Math.ceil(docIds.length / 2);
 
@@ -178,6 +196,19 @@ export function DocumentsStep() {
             <div className="docs-banner-s">{t("bannerS")}</div>
           </div>
         </div>
+        {weHandle.length > 0 && (
+          <div className="docs-handled">
+            <Icon.CheckCircle style={{ width: 16, height: 16, color: "var(--good)" }} />
+            <div>
+              <div className="docs-handled-h">{t("weHandleH")}</div>
+              <ul className="docs-handled-list">
+                {weHandle.map((id) => (
+                  <li key={id}>{t(`${kind}.${id}.name`)}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
         <div className="docs-list">
           {docIds.map((id) => (
             <DocRow
