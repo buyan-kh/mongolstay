@@ -36,7 +36,7 @@ function formatScheduleLine(s: ConfirmInput["schedule"]) {
     const d = new Date(s.iso);
     const date = d.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
     const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-    return `${date} at ${time} · ${s.channel === "video" ? "Video call" : "In-person, Manhattan office"}`;
+    return `${date} at ${time} · ${s.channel === "video" ? "Video call" : "In-person · San Francisco office"}`;
   }
   if (s.mode === "callback") return `Callback requested · ${s.window}`;
   return "Schedule pending";

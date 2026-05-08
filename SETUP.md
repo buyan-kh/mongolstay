@@ -139,12 +139,12 @@ If `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is unset, the widget doesn't render — usef
 
 ## 5. Manual payment instructions
 
-Whatever Zelle/cash recipient details you actually want printed on the invoice and shown to clients:
+Whatever Zelle/cash recipient details you actually want printed on the invoice and shown to clients. **Leave `NEXT_PUBLIC_ZELLE_EMAIL` unset** until you have a real recipient — the UI hides the row and tells the client we'll text the handle after they confirm.
 
 ```
-NEXT_PUBLIC_ZELLE_EMAIL=pay@mongolstay.com
+# NEXT_PUBLIC_ZELLE_EMAIL=          # leave empty until real
 NEXT_PUBLIC_ZELLE_NAME="Mongolstay PLLC"
-NEXT_PUBLIC_OFFICE_ADDRESS="350 5th Avenue, Suite 4810, New York, NY 10118"
+NEXT_PUBLIC_OFFICE_ADDRESS="388 Market Street, Suite 1300, San Francisco, CA 94111"
 ```
 
 ---
