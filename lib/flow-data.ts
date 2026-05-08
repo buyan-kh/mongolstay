@@ -1,9 +1,9 @@
 export type FlowKind = "j1f1" | "b1b2f1" | "asylum";
 
 export const PRICES = {
-  j1f1: { fee: 2000, uscisFee: 370 },
-  b1b2f1: { fee: 2000, uscisFee: 370 },   // same I-539 fee structure as J-1 → F-1
-  asylum: { fee: 4000, uscisFee: 0 },
+  j1f1: { fee: 1000, uscisFee: 370 },
+  b1b2f1: { fee: 1000, uscisFee: 370 },   // same I-539 fee structure as J-1 → F-1
+  asylum: { fee: 3000, uscisFee: 100 },   // I-589 has a $100 USCIS biometrics fee
 } as const;
 
 export const STEPS = ["eligibility", "documents", "schedule", "payment"] as const;
