@@ -7,7 +7,27 @@ import { FlowFooter } from "@/components/flow-shell";
 import { useFlow } from "@/components/flow-provider";
 import type { AppointmentChannel } from "@/lib/flow-data";
 
-const TIMES = ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30"];
+// Office hours by day-of-week (0=Sun ... 6=Sat). The number is the latest hour
+// (24h) at which an appointment can START — slots are 30 min apart starting at
+// 9:00. Days not listed are unavailable.
+const HOURS: Record<number, { startHour: number; endHour: number }> = {
+  0: { startHour: 9, endHour: 17 }, // Sunday — all day (9–5)
+  1: { startHour: 9, endHour: 17 }, // Monday — all day
+  3: { startHour: 9, endHour: 17 }, // Wednesday — all day
+  5: { startHour: 9, endHour: 17 }, // Friday — before 5pm
+  6: { startHour: 9, endHour: 15 }, // Saturday — before 3pm
+};
+
+function buildSlots(dow: number): string[] {
+  const cfg = HOURS[dow];
+  if (!cfg) return [];
+  const slots: string[] = [];
+  for (let h = cfg.startHour; h < cfg.endHour; h++) {
+    slots.push(`${String(h).padStart(2, "0")}:00`);
+    slots.push(`${String(h).padStart(2, "0")}:30`);
+  }
+  return slots;
+}
 
 const CALLBACK_WINDOWS = [
   "today",
@@ -27,12 +47,15 @@ export function ScheduleStep() {
   const setMode = (m: typeof mode) =>
     setState((s) => ({ ...s, schedule: { ...s.schedule, mode: m } }));
 
+  // Show the next 6 calendar days that the office is actually open. Office is
+  // closed Tue + Thu, so we scan further forward until we have 6 slots.
   const days = useMemo(() => {
     const out: Date[] = [];
     const d = new Date();
-    while (out.length < 6) {
+    let safety = 30;
+    while (out.length < 6 && safety-- > 0) {
       d.setDate(d.getDate() + 1);
-      if (d.getDay() !== 0 && d.getDay() !== 6) out.push(new Date(d));
+      if (HOURS[d.getDay()]) out.push(new Date(d));
     }
     return out;
   }, []);
@@ -63,7 +86,10 @@ export function ScheduleStep() {
     : null;
 
   const pickDay = (d: Date) => {
-    const time = selectedTime ?? "10:30";
+    // If the previously chosen time is past this day's cutoff, fall back to
+    // the first slot of the new day.
+    const slots = buildSlots(d.getDay());
+    const time = selectedTime && slots.includes(selectedTime) ? selectedTime : slots[0] ?? "09:00";
     const [hh, mm] = time.split(":").map(Number);
     const next = new Date(d);
     next.setHours(hh, mm, 0, 0);
@@ -192,20 +218,17 @@ export function ScheduleStep() {
                 })}
               </div>
               <div className="appt-times">
-                {TIMES.map((time, i) => {
-                  const taken = i === 2; // demo: 12:00 taken; replace with real availability
-                  return (
-                    <button
-                      key={time}
-                      type="button"
-                      disabled={taken || !selectedDayKey}
-                      className={`appt-time ${selectedTime === time ? "sel" : ""} ${taken ? "taken" : ""}`}
-                      onClick={() => pickTime(time)}
-                    >
-                      {time}
-                    </button>
-                  );
-                })}
+                {(selectedDate ? buildSlots(selectedDate.getDay()) : buildSlots(days[0]?.getDay() ?? 1)).map((time) => (
+                  <button
+                    key={time}
+                    type="button"
+                    disabled={!selectedDayKey}
+                    className={`appt-time ${selectedTime === time ? "sel" : ""}`}
+                    onClick={() => pickTime(time)}
+                  >
+                    {time}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
