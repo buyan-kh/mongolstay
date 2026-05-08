@@ -26,7 +26,21 @@ export function ApprovalLetter({
   const _addr1 = redacted ? "████ ██████████ ████" : "1234 EXAMPLE ST";
   const _addr2 = redacted ? "███████████, ██ █████" : "ANYTOWN, NY 10001";
   const _ab = redacted ? "███-███-█████" : "A123-456-789";
-  const dateDay = 10 + (parseInt(caseNo?.slice(-2) || "00", 10) % 18);
+  // Derive a deterministic-but-varied notice date from the case number so each
+  // letter on the wall shows a different month/day.
+  const seed = parseInt(caseNo?.slice(-4) || "0000", 10);
+  const months = [
+    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
+  ];
+  const monthsLong = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+  const monthIdx = seed % 12;
+  const dateDay = 1 + ((seed >> 4) % 27);
+  const monthShort = months[monthIdx];
+  const monthLong = monthsLong[monthIdx];
 
   return (
     <div className={`uscis ${dense ? "uscis-dense" : ""}`}>
@@ -51,7 +65,7 @@ export function ApprovalLetter({
       <div className="uscis-stamp">
         <div className="stamp-box">
           <div className="stamp-word">{decision}</div>
-          <div className="stamp-date">{`MAR ${dateDay}, ${year}`}</div>
+          <div className="stamp-date">{`${monthShort} ${dateDay}, ${year}`}</div>
         </div>
       </div>
 
@@ -59,7 +73,7 @@ export function ApprovalLetter({
 
       <div className="uscis-meta">
         <div><b>RECEIPT NUMBER</b><div className="mono">{caseNo}</div></div>
-        <div><b>NOTICE DATE</b><div>March {dateDay}, {year}</div></div>
+        <div><b>NOTICE DATE</b><div>{monthLong} {dateDay}, {year}</div></div>
         <div><b>CASE TYPE</b><div className="tiny">{typeline}</div></div>
         <div><b>BENEFICIARY</b><div className="mono">{_ab}</div></div>
       </div>
