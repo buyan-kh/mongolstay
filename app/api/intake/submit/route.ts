@@ -7,6 +7,7 @@ import { verifyTurnstile } from "@/lib/turnstile";
 import { verifyStoredDocument } from "@/lib/upload-verify";
 import { originAllowed, rateLimit, requestIp } from "@/lib/rate-limit";
 import { logAudit } from "@/lib/audit";
+import { sendAttorneyAlert, sendClientConfirmation } from "@/lib/email";
 import { sendClientSmsConfirmation } from "@/lib/sms";
 
 export const runtime = "nodejs";
@@ -119,19 +120,45 @@ export async function POST(req: Request) {
     metadata: { kind, method, docCount: documents?.length ?? 0 },
   });
 
-  // Fire-and-forget SMS confirmation. Twilio not configured? sendClientSmsConfirmation
-  // logs and resolves — never blocks the submit.
+  // Build the schedule payload once for both email + SMS.
+  type SchedulePayloadOut =
+    | { mode: "appointment"; iso: string; channel: "office" | "video" }
+    | { mode: "callback"; window: string }
+    | { mode: null };
+  const schedulePayload: SchedulePayloadOut =
+    schedule.mode === "appointment"
+      ? { mode: "appointment", iso: schedule.iso, channel: schedule.channel }
+      : schedule.mode === "callback"
+      ? { mode: "callback", window: schedule.window }
+      : { mode: null };
+
+  // Fire-and-forget SMS confirmation (no-ops if Twilio env not set).
   void sendClientSmsConfirmation({
     to: contact.phone,
     reference,
     kind,
-    schedule:
-      schedule.mode === "appointment"
-        ? { mode: "appointment", iso: schedule.iso, channel: schedule.channel }
-        : schedule.mode === "callback"
-        ? { mode: "callback", window: schedule.window }
-        : { mode: null },
+    schedule: schedulePayload,
   }).catch((e) => console.error("sms:confirm failed", e));
+
+  // Email the client + attorney inbox NOW for Zelle/cash so they have a clear
+  // "awaiting payment" record. Card flow handles its own email via the Stripe
+  // webhook once the session completes.
+  if (method !== "card") {
+    const confirmInput = {
+      to: contact.email,
+      clientName: contact.name,
+      reference,
+      kind,
+      amountUsd: amountCents / 100,
+      method,
+      paid: false,
+      schedule: schedulePayload,
+    };
+    void Promise.allSettled([
+      sendClientConfirmation(confirmInput),
+      sendAttorneyAlert(confirmInput),
+    ]).catch((e) => console.error("email:awaiting failed", e));
+  }
 
   if (method === "card") {
     const origin = req.headers.get("origin") || "http://localhost:3000";

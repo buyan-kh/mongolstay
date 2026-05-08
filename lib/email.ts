@@ -2,8 +2,11 @@ import "server-only";
 import { getResend } from "./resend";
 import type { FlowKind, PaymentMethod } from "./flow-data";
 
-const FROM = process.env.RESEND_FROM || "Mongolstay <intake@mongolstay.com>";
-const ATTORNEY_INBOX = process.env.INTAKE_TO || "intake@mongolstay.com";
+const FROM = process.env.RESEND_FROM || "Mongolstay <contact@mongolstay.com>";
+const ATTORNEY_INBOX = process.env.INTAKE_TO || "contact@mongolstay.com";
+// Permanent Google Meet room URL (one-time setup at meet.google.com → "Create
+// new meeting"). When set, video-appointment confirmations include the link.
+const MEET_LINK = process.env.MEET_LINK || "";
 
 const FILING_LABEL: Record<FlowKind, string> = {
   j1f1: "J-1 → F-1 change of status (I-539)",
@@ -42,6 +45,26 @@ function formatScheduleLine(s: ConfirmInput["schedule"]) {
   return "Schedule pending";
 }
 
+// Method-specific "what to do next" copy when payment is still awaiting.
+function awaitingPaymentInstructions(input: ConfirmInput): string[] {
+  const amt = `$${input.amountUsd.toLocaleString()}`;
+  if (input.method === "zelle") {
+    return [
+      `We'll text the Zelle handle to your phone shortly. Send ${amt} with memo "${input.reference}" — we'll mark your filing paid as soon as it lands (usually within minutes).`,
+    ];
+  }
+  if (input.method === "cash") {
+    return [
+      `Bring ${amt} in cash or a cashier's check to your appointment. We'll print your receipt and start the filing the moment you walk in.`,
+    ];
+  }
+  // Card with awaiting status means Stripe redirect was abandoned — they
+  // can return to the payment page anytime to finish.
+  return [
+    `Your card payment didn't complete. You can finish at https://mongolstay.com/file/${input.kind}/payment using reference ${input.reference}.`,
+  ];
+}
+
 export async function sendClientConfirmation(input: ConfirmInput) {
   const resend = getResend();
   const scheduleLine = formatScheduleLine(input.schedule);
@@ -49,22 +72,39 @@ export async function sendClientConfirmation(input: ConfirmInput) {
     ? `Mongolstay · ${FILING_LABEL[input.kind]} · ${input.reference}`
     : `Mongolstay · Awaiting payment · ${input.reference}`;
 
-  const text = [
+  // Surface the Meet link only for video appointments (in-person doesn't need
+  // it; callbacks don't have one yet).
+  const meetLine =
+    MEET_LINK && input.schedule.mode === "appointment" && input.schedule.channel === "video"
+      ? [`Video call: ${MEET_LINK}`]
+      : [];
+
+  const lines = [
     `Hi ${input.clientName || "there"},`,
     "",
     input.paid
       ? `Thanks — we've received your payment of $${input.amountUsd.toLocaleString()} for ${FILING_LABEL[input.kind]}.`
-      : `We've recorded your filing for ${FILING_LABEL[input.kind]} ($${input.amountUsd.toLocaleString()} via ${METHOD_LABEL[input.method]}). We'll mark it paid once payment is received.`,
+      : `We've recorded your filing for ${FILING_LABEL[input.kind]} ($${input.amountUsd.toLocaleString()} via ${METHOD_LABEL[input.method]}).`,
+  ];
+
+  if (!input.paid) {
+    lines.push("", ...awaitingPaymentInstructions(input));
+  }
+
+  lines.push(
     "",
     `Reference: ${input.reference}`,
     `Schedule:  ${scheduleLine}`,
+    ...meetLine,
     "",
     "An attorney will review your case before any USCIS filing. We'll be in touch with anything we still need.",
     "",
+    `Track your filing anytime: https://mongolstay.com/dashboard`,
+    "",
     "— Mongolstay",
-  ].join("\n");
+  );
 
-  return resend.emails.send({ from: FROM, to: input.to, subject, text });
+  return resend.emails.send({ from: FROM, to: input.to, subject, text: lines.join("\n") });
 }
 
 // Notification email to a client when an attorney posts a new message.

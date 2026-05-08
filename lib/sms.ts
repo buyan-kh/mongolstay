@@ -8,6 +8,7 @@ import type { FlowKind } from "./flow-data";
 const ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
 const AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
 const FROM_NUMBER = process.env.TWILIO_FROM_NUMBER;
+const MEET_LINK = process.env.MEET_LINK || "";
 
 const FILING_LABEL: Record<FlowKind, string> = {
   j1f1: "J-1 → F-1 (I-539)",
@@ -79,10 +80,12 @@ function formatScheduleLine(s: SmsConfirmInput["schedule"]): string {
 export async function sendClientSmsConfirmation(input: SmsConfirmInput) {
   const to = toE164(input.to);
   if (!to) return { skipped: true, reason: "no phone" } as const;
+  const isVideo = input.schedule.mode === "appointment" && input.schedule.channel === "video";
+  const meetTail = MEET_LINK && isVideo ? ` Meet: ${MEET_LINK}` : "";
   const body =
     `Mongolstay: ${FILING_LABEL[input.kind]} confirmed. ` +
     `Ref ${input.reference}. ` +
-    `${formatScheduleLine(input.schedule)}. ` +
+    `${formatScheduleLine(input.schedule)}.${meetTail} ` +
     `Track: https://mongolstay.com/dashboard`;
   return send(to, body);
 }

@@ -106,19 +106,40 @@ STRIPE_WEBHOOK_SECRET=whsec_…
 
 ---
 
-## 3. Resend
+## 3. Resend (sending email from contact@mongolstay.com)
+
+You bought `mongolstay.com` through Google Workspace, so `contact@mongolstay.com` already receives mail. To **send** from that address you have two options — Resend is easier and is what we already use.
 
 1. https://resend.com → **API keys → Create API key** (full access for now).
-2. **Domains → Add domain** → `mongolstay.com`. Add the DNS records they show you. Wait for verification.
-3. Set:
+2. **Domains → Add domain** → `mongolstay.com`. Resend gives you 3–4 DNS records (SPF, DKIM, MX). Paste each into Google Workspace:
+   - Google Admin → **Domains → Manage domains → mongolstay.com → Manage DNS** (or your domain registrar's DNS panel — Google Domains / Squarespace).
+   - Add the TXT + CNAME records exactly as shown.
+   - Click **Verify** in Resend. Usually takes 5–15 min.
+3. Once verified, set in Vercel env (Production):
 
 ```
 RESEND_API_KEY=re_...
-RESEND_FROM="Mongolstay <intake@mongolstay.com>"
-INTAKE_TO=intake@mongolstay.com           # where attorney alerts land
+RESEND_FROM="Mongolstay <contact@mongolstay.com>"
+INTAKE_TO=contact@mongolstay.com           # where attorney alerts land
 ```
 
-Until the domain is verified you can use Resend's test domain (`onboarding@resend.dev`) but only to your own verified inbox.
+Until the domain is verified you can use Resend's test domain (`onboarding@resend.dev`) — but it only sends to your own verified inbox.
+
+---
+
+## 3a. Google Meet link
+
+We don't auto-create per-appointment Meet rooms (that needs a Google Cloud project + Calendar API + service account). For now we send **one permanent meeting room URL** with every video confirmation:
+
+1. Go to https://meet.google.com signed in as `contact@mongolstay.com`.
+2. Click **New meeting → Create a meeting for later**. Google generates a stable URL like `https://meet.google.com/abc-defg-hij`.
+3. Set it as a Vercel env var:
+
+```
+MEET_LINK=https://meet.google.com/abc-defg-hij
+```
+
+When `MEET_LINK` is set, every video-appointment confirmation email + SMS appends the link. If you ever want per-appointment rooms, swap to the Calendar API (`conferenceData.createRequest`) — happy to wire it up when you have the Google Cloud project.
 
 ---
 
