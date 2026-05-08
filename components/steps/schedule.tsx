@@ -53,7 +53,8 @@ export function ScheduleStep() {
     }));
 
   const apptIso = state.schedule.appointment?.iso;
-  const apptChannel = state.schedule.appointment?.channel ?? "office";
+  // In-person is paused — every new appointment is a video call.
+  const apptChannel: AppointmentChannel = "video";
 
   const selectedDate = apptIso ? new Date(apptIso) : null;
   const selectedDayKey = selectedDate ? selectedDate.toISOString().slice(0, 10) : null;
@@ -75,14 +76,6 @@ export function ScheduleStep() {
     const next = new Date(selectedDate);
     next.setHours(hh, mm, 0, 0);
     setAppt(next.toISOString(), apptChannel);
-  };
-
-  const setChannel = (c: AppointmentChannel) => {
-    if (apptIso) setAppt(apptIso, c);
-    else setState((s) => ({
-      ...s,
-      schedule: { ...s.schedule, appointment: { iso: "", channel: c } },
-    }));
   };
 
   // Validation
@@ -170,22 +163,10 @@ export function ScheduleStep() {
         {mode === "appointment" ? (
           <div className="appt">
             <div className="appt-modes">
-              <button
-                type="button"
-                className={`appt-mode ${apptChannel === "office" ? "sel" : ""}`}
-                onClick={() => setChannel("office")}
-              >
-                <div className="appt-mode-h">{t("channel.officeH")}</div>
-                <div className="appt-mode-s">{t("channel.officeS")}</div>
-              </button>
-              <button
-                type="button"
-                className={`appt-mode ${apptChannel === "video" ? "sel" : ""}`}
-                onClick={() => setChannel("video")}
-              >
+              <div className="appt-mode sel">
                 <div className="appt-mode-h">{t("channel.videoH")}</div>
                 <div className="appt-mode-s">{t("channel.videoS")}</div>
-              </button>
+              </div>
             </div>
 
             <div className="appt-cal">
