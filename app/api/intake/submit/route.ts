@@ -7,6 +7,7 @@ import { verifyTurnstile } from "@/lib/turnstile";
 import { verifyStoredDocument } from "@/lib/upload-verify";
 import { originAllowed, rateLimit, requestIp } from "@/lib/rate-limit";
 import { logAudit } from "@/lib/audit";
+import { sendClientSmsConfirmation } from "@/lib/sms";
 
 export const runtime = "nodejs";
 
@@ -117,6 +118,20 @@ export async function POST(req: Request) {
     resource: `intake:${reference}`,
     metadata: { kind, method, docCount: documents?.length ?? 0 },
   });
+
+  // Fire-and-forget SMS confirmation. Twilio not configured? sendClientSmsConfirmation
+  // logs and resolves — never blocks the submit.
+  void sendClientSmsConfirmation({
+    to: contact.phone,
+    reference,
+    kind,
+    schedule:
+      schedule.mode === "appointment"
+        ? { mode: "appointment", iso: schedule.iso, channel: schedule.channel }
+        : schedule.mode === "callback"
+        ? { mode: "callback", window: schedule.window }
+        : { mode: null },
+  }).catch((e) => console.error("sms:confirm failed", e));
 
   if (method === "card") {
     const origin = req.headers.get("origin") || "http://localhost:3000";
