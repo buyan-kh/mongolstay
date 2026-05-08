@@ -53,16 +53,16 @@ export const DOC_IDS: Record<FlowKind, string[]> = {
 };
 
 export const LETTERS = [
-  { kind: "i539", caseNo: "EAC2487012845", country: "India", year: "2025", size: "l" },
-  { kind: "i539", caseNo: "LIN2487102391", country: "China", year: "2025", size: "m" },
-  { kind: "i589", caseNo: "MSC2491307821", country: "Russia", year: "2024", size: "m" },
-  { kind: "i539", caseNo: "WAC2491150923", country: "Brazil", year: "2025", size: "s" },
-  { kind: "i539", caseNo: "EAC2487223410", country: "Iran", year: "2025", size: "s" },
-  { kind: "i589", caseNo: "NBC2490912334", country: "Venezuela", year: "2024", size: "l" },
-  { kind: "i539", caseNo: "LIN2487451123", country: "Nigeria", year: "2025", size: "m" },
-  { kind: "i589", caseNo: "EAC2491100712", country: "Turkey", year: "2024", size: "s" },
-  { kind: "i539", caseNo: "WAC2487556614", country: "Korea", year: "2024", size: "s" },
-  { kind: "i539", caseNo: "MSC2491228856", country: "Vietnam", year: "2025", size: "m" },
+  { kind: "i539", caseNo: "WAC2691104872", country: "Mongolia", year: "2026", size: "l" },
+  { kind: "i539", caseNo: "EAC2587823910", country: "Mongolia", year: "2025", size: "m" },
+  { kind: "i589", caseNo: "MSC2691307502", country: "Mongolia", year: "2026", size: "m" },
+  { kind: "i539", caseNo: "LIN2587451623", country: "Mongolia", year: "2025", size: "s" },
+  { kind: "i539", caseNo: "WAC2691226118", country: "Mongolia", year: "2026", size: "s" },
+  { kind: "i589", caseNo: "NBC2587012948", country: "Mongolia", year: "2025", size: "l" },
+  { kind: "i539", caseNo: "EAC2691150217", country: "Mongolia", year: "2026", size: "m" },
+  { kind: "i589", caseNo: "EAC2587223380", country: "Mongolia", year: "2025", size: "s" },
+  { kind: "i539", caseNo: "LIN2691102744", country: "Mongolia", year: "2026", size: "s" },
+  { kind: "i539", caseNo: "MSC2587556205", country: "Mongolia", year: "2025", size: "m" },
 ] as const;
 
 export const ATTORNEYS = [
