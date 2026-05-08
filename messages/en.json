@@ -265,6 +265,10 @@
   },
   "flow": {
     "back": "Back to mongolstay.com",
+    "choose": {
+      "h": "Pick the filing that fits you.",
+      "s": "Three paths — choose one to start the eligibility check. Not sure which one applies? Pick the closest match; we'll confirm at attorney review."
+    },
     "tag": { "j1f1": "J-1 → F-1 · I-539", "b1b2f1": "B-1/B-2 → F-1 · I-539", "asylum": "Asylum · I-589" },
     "stepN": "Step {current} of {total} · {label}",
     "buttons": {
@@ -310,20 +314,70 @@
       "verdictS_asylum": "Based on your answers, we'll prepare an I-589 asylum application. A licensed attorney will review before filing.",
       "questions": {
         "j1f1": {
-          "inUS":      { "q": "Are you currently inside the United States?", "opts": ["Yes", "No"] },
-          "currentJ1": { "q": "Are you currently in valid J-1 status?", "opts": ["Yes", "Expired", "Unsure"] },
-          "dsExpiry":  { "q": "When does your DS-2019 expire?", "opts": ["Already expired", "Less than 30 days", "1–3 months", "More than 3 months"] },
-          "waiver":    { "q": "Are you subject to the 2-year home residency requirement?", "opts": ["Yes", "No", "Already waived"] },
-          "i20":       { "q": "Do you have an I-20 from a SEVP-approved school?", "opts": ["Yes", "Not yet", "In progress"] },
-          "funds":     { "q": "Can you show proof of funds for at least one year?", "opts": ["Yes", "Partially", "No"] }
+          "inUS":      {
+            "q": "Are you currently inside the United States?",
+            "opts": ["Yes", "No"],
+            "hint": "Change of status only works while you're physically in the U.S. If you're abroad, you'll need to apply for an F-1 visa at a U.S. consulate instead."
+          },
+          "currentJ1": {
+            "q": "Are you currently in valid J-1 status?",
+            "opts": ["Yes", "Expired", "Unsure"],
+            "hint": "Valid means your DS-2019 hasn't expired and you haven't violated program terms. Check the end date on your DS-2019 — not your visa stamp."
+          },
+          "dsExpiry":  {
+            "q": "When does your DS-2019 expire?",
+            "opts": ["Already expired", "Less than 30 days", "1–3 months", "More than 3 months"],
+            "hint": "Your DS-2019 is the program form your J-1 sponsor issued you. The expiration is in box #3. We need to file before it expires (or use the 30-day grace period)."
+          },
+          "waiver":    {
+            "q": "Are you subject to the 2-year home residency requirement (212(e))?",
+            "opts": ["Yes", "No", "Already waived", "Not sure"],
+            "hint": "Check your J-1 visa stamp and DS-2019 — they will say either \"Bearer is subject to 212(e)\" or \"Bearer is not subject to 212(e).\" If it says NOT subject, the 2-year rule does not block changing to F-1.",
+            "note": "(Mongolians who arrived on Summer Work & Travel are typically not subject to the 2-year rule — your DS-2019 will say so explicitly.)"
+          },
+          "i20":       {
+            "q": "Do you have an I-20 from a SEVP-approved school?",
+            "opts": ["Yes", "Not yet", "In progress"],
+            "hint": "The I-20 is issued by your future U.S. school after you're admitted and they've reviewed your financial documents. Without it we can't file the I-539 — we'll help you get it if needed."
+          },
+          "funds":     {
+            "q": "Can you show proof of funds for at least one year?",
+            "opts": ["Yes", "Partially", "No"],
+            "hint": "Bank statements, sponsor letters, or an I-134 (Affidavit of Support) all count. The amount must cover one academic year of tuition + living costs as listed on your I-20."
+          }
         },
         "b1b2f1": {
-          "inUS":           { "q": "Are you currently inside the United States?", "opts": ["Yes", "No"] },
-          "currentBStatus": { "q": "Did you enter the U.S. on a B-1 or B-2 visa?", "opts": ["B-1 (business)", "B-2 (tourist)", "Either / both", "Other / not sure"] },
-          "bExpiry":        { "q": "When does your authorized stay (I-94 expiration) end?", "opts": ["Already expired", "Less than 30 days", "1–3 months", "More than 3 months", "Not sure"] },
-          "intent":         { "q": "When you entered the U.S., did you intend to study?", "opts": ["No, that decision came later", "Maybe — I was considering it", "Yes, I intended to study"] },
-          "i20":            { "q": "Do you have an I-20 from a SEVP-approved school?", "opts": ["Yes", "Not yet", "In progress"] },
-          "funds":          { "q": "Can you show proof of funds for at least one year?", "opts": ["Yes", "Partially", "No"] }
+          "inUS":           {
+            "q": "Are you currently inside the United States?",
+            "opts": ["Yes", "No"],
+            "hint": "Change of status only works while you're physically in the U.S. If you're abroad, you'll need to apply for an F-1 visa at a U.S. consulate instead."
+          },
+          "currentBStatus": {
+            "q": "Did you enter the U.S. on a B-1 or B-2 visa?",
+            "opts": ["B-1 (business)", "B-2 (tourist)", "Either / both", "Other / not sure"],
+            "hint": "Most visitors enter on a B-2 (tourist). B-1 is for short business trips. Check your visa stamp and I-94 — both will show the class.",
+            "note": "(Good news: B-2 → F-1 has no 2-year home residency requirement. Unlike J-1, the 212(e) rule doesn't apply to visitors.)"
+          },
+          "bExpiry":        {
+            "q": "When does your authorized stay (I-94 expiration) end?",
+            "opts": ["Already expired", "Less than 30 days", "1–3 months", "More than 3 months", "Not sure"],
+            "hint": "Your I-94 sets how long you can legally stay — not the visa stamp. Download your latest I-94 from i94.cbp.dhs.gov to see the exact date. We must file the I-539 before it expires."
+          },
+          "intent":         {
+            "q": "When you entered the U.S., did you intend to study?",
+            "opts": ["No, that decision came later", "Maybe — I was considering it", "Yes, I intended to study"],
+            "hint": "USCIS denies B → F-1 changes when the visitor entered with preconceived intent to study (it's called \"misrepresentation\"). Most safe filings are made 60+ days after entry. Be honest — your attorney will work with whatever your real situation is."
+          },
+          "i20":            {
+            "q": "Do you have an I-20 from a SEVP-approved school?",
+            "opts": ["Yes", "Not yet", "In progress"],
+            "hint": "The I-20 is issued by your future U.S. school after admission. Without it we can't file the I-539 — we'll help you get one if needed."
+          },
+          "funds":          {
+            "q": "Can you show proof of funds for at least one year?",
+            "opts": ["Yes", "Partially", "No"],
+            "hint": "Bank statements, sponsor letters, or an I-134 (Affidavit of Support) all count. The amount must cover one academic year of tuition + living costs as listed on your I-20."
+          }
         },
         "asylum": {
           "inUS":          { "q": "Are you currently inside the United States?", "opts": ["Yes", "No"] },

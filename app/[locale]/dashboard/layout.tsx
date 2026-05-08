@@ -20,9 +20,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <div className="dlayout">
       <header className="dash-bar">
-        <Link className="brand" href="/">
+        <Link className="brand" href="/" aria-label="mongolstay.com">
           <BrandMark />
-          <span>mongolstay<span style={{ color: "var(--muted)", fontWeight: 400 }}>.com</span></span>
         </Link>
         <div style={{ flex: 1 }} />
         <LanguageSwitcher />

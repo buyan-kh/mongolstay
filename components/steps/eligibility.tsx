@@ -38,11 +38,23 @@ export function EligibilityStep() {
     <>
       <div className="elig">
         {questions.map((q) => {
-          const qText = t(`questions.${kind}.${q.id}.q`);
-          const opts = (t.raw(`questions.${kind}.${q.id}.opts`) as string[]) ?? [];
+          // Read the whole question record once so we can pluck optional copy
+          // (hint/note) without next-intl throwing on missing keys.
+          const raw = t.raw(`questions.${kind}.${q.id}`) as {
+            q: string;
+            opts: string[];
+            hint?: string;
+            note?: string;
+          };
+          const qText = raw.q;
+          const opts = raw.opts ?? [];
+          const hint = raw.hint;
+          const note = raw.note;
           return (
             <div className="elig-q" key={q.id}>
               <div className="elig-prompt">{qText}</div>
+              {hint && <div className="elig-hint">{hint}</div>}
+              {note && <div className="elig-note">{note}</div>}
               <div className="elig-opts">
                 {opts.map((o) => {
                   const cur = state.answers[q.id];

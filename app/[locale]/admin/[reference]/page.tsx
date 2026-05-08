@@ -58,9 +58,8 @@ export default async function Page({
   return (
     <div className="dash">
       <header className="dash-bar">
-        <Link className="brand" href="/admin">
+        <Link className="brand" href="/admin" aria-label="mongolstay.com">
           <BrandMark />
-          <span>mongolstay<span style={{ color: "var(--muted)", fontWeight: 400 }}>.com</span></span>
         </Link>
         <span className="dash-card-lbl">{t("badge")}</span>
         <div style={{ flex: 1 }} />

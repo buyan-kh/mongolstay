@@ -12,9 +12,8 @@ export async function Nav() {
   return (
     <nav className="nav">
       <div className="nav-row">
-        <Link className="brand" href="/">
+        <Link className="brand" href="/" aria-label="mongolstay.com">
           <BrandMark />
-          <span>mongolstay<span style={{ color: "var(--muted)", fontWeight: 400 }}>.com</span></span>
         </Link>
         <div className="nav-links">
           <a href="#flows">{t("services")}</a>
@@ -33,7 +32,7 @@ export async function Nav() {
         ) : (
           <Link className="btn btn-sm btn-ghost" href="/login">{t("signIn")}</Link>
         )}
-        <Link className="btn btn-sm btn-primary" href="/file/j1f1/eligibility">{t("startFiling")}</Link>
+        <Link className="btn btn-sm btn-primary" href="/file">{t("startFiling")}</Link>
       </div>
     </nav>
   );
@@ -83,7 +82,7 @@ function Stat({ num, label, sub }: { num: string; label: string; sub?: string })
   );
 }
 
-async function ServiceCard({ kind }: { kind: "j1f1" | "b1b2f1" | "asylum" }) {
+export async function ServiceCard({ kind }: { kind: "j1f1" | "b1b2f1" | "asylum" }) {
   const t = await getTranslations(`services.${kind}`);
   const tagColor =
     kind === "asylum" ? "var(--accent)" :
