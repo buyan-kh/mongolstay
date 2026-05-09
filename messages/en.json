@@ -512,13 +512,13 @@
         },
         "zelle": {
           "label": "Zelle",
-          "body": "Confirm with the reference below and we'll text you the Zelle handle to send ${total} to. We'll match your transfer to this filing automatically.",
+          "body": "Confirm with the reference below and we'll email you the Zelle handle to send ${total} to. We'll match your transfer to this filing automatically.",
           "recipient": "Send to",
-          "recipientHidden": "Sent by text after you confirm",
+          "recipientHidden": "Sent by email after you confirm",
           "amount": "Amount",
           "memo": "Memo / reference",
           "foot": "We'll mark your filing paid once we receive the transfer (usually within minutes).",
-          "cta": "Confirm — text me Zelle details"
+          "cta": "Confirm — email me Zelle details"
         },
         "cash": {
           "label": "Cash (today)",
@@ -545,7 +545,7 @@
       "status": "Status",
       "statusPaid": "Paid",
       "statusAwaiting": "Awaiting payment",
-      "zelleNote": "We'll text you the Zelle handle. Send the amount with memo \"{memo}\" — we'll mark this paid on receipt.",
+      "zelleNote": "We'll email you the Zelle handle. Send the amount with memo \"{memo}\" — we'll mark this paid on receipt.",
       "cashNote": "Bring this invoice and reference {reference} when you come in.",
       "foot": "Mongolstay PLLC. Attorney advertising. Refundable if attorneys decline the case after review.",
       "print": "Print invoice"

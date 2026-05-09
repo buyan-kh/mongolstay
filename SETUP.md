@@ -106,30 +106,31 @@ STRIPE_WEBHOOK_SECRET=whsec_…
 
 ---
 
-## 3. Resend (sending email from contact@mongolstay.com)
+## 3. Email (Gmail SMTP via Google Workspace)
 
-You bought `mongolstay.com` through Google Workspace, so `contact@mongolstay.com` already receives mail. To **send** from that address you have two options — Resend is easier and is what we already use.
+You bought `mongolstay.com` through Google Workspace and `contact@mongolstay.com` already sends + receives mail. We send straight through Gmail SMTP — no third-party email service, no DNS verification.
 
-1. https://resend.com → **API keys → Create API key** (full access for now).
-2. **Domains → Add domain** → `mongolstay.com`. Resend gives you 3–4 DNS records (SPF, DKIM, MX). Paste each into Google Workspace:
-   - Google Admin → **Domains → Manage domains → mongolstay.com → Manage DNS** (or your domain registrar's DNS panel — Google Domains / Squarespace).
-   - Add the TXT + CNAME records exactly as shown.
-   - Click **Verify** in Resend. Usually takes 5–15 min.
-3. Once verified, set in Vercel env (Production):
+1. Sign in to https://myaccount.google.com as `contact@mongolstay.com`.
+2. **Security → 2-Step Verification** must be on (Google won't let you create an app password without it).
+3. Visit https://myaccount.google.com/apppasswords. Pick **Other (custom name)** → "Mongolstay Site". Google shows a 16-character password — copy it (you only see it once).
+4. Set in Vercel env (Production):
 
 ```
-RESEND_API_KEY=re_...
-RESEND_FROM="Mongolstay <contact@mongolstay.com>"
+GMAIL_USER=contact@mongolstay.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx     # the 16-char password Google gave you
+MAIL_FROM="Mongolstay <contact@mongolstay.com>"
 INTAKE_TO=contact@mongolstay.com           # where attorney alerts land
 ```
 
-Until the domain is verified you can use Resend's test domain (`onboarding@resend.dev`) — but it only sends to your own verified inbox.
+> **Workspace admin note**: if you're on a managed Workspace and don't see the App Passwords page, ask the admin to allow "Less secure app access" via app passwords for your account, or enable it in **Admin Console → Security → API controls → Domain-wide delegation**.
+
+Limits: ~500 sends/day on Workspace SMTP, plenty for intake volume. Bump to a real ESP if you ever need more.
 
 ---
 
 ## 3a. Google Meet link
 
-We don't auto-create per-appointment Meet rooms (that needs a Google Cloud project + Calendar API + service account). For now we send **one permanent meeting room URL** with every video confirmation:
+We don't auto-create per-appointment Meet rooms yet (that needs a Google Cloud project + Calendar API + service account). For now we send **one permanent meeting room URL** with every video confirmation:
 
 1. Go to https://meet.google.com signed in as `contact@mongolstay.com`.
 2. Click **New meeting → Create a meeting for later**. Google generates a stable URL like `https://meet.google.com/abc-defg-hij`.
@@ -139,7 +140,7 @@ We don't auto-create per-appointment Meet rooms (that needs a Google Cloud proje
 MEET_LINK=https://meet.google.com/abc-defg-hij
 ```
 
-When `MEET_LINK` is set, every video-appointment confirmation email + SMS appends the link. If you ever want per-appointment rooms, swap to the Calendar API (`conferenceData.createRequest`) — happy to wire it up when you have the Google Cloud project.
+When `MEET_LINK` is set, every video-appointment confirmation email appends the link. If you ever want per-appointment rooms, swap to the Calendar API (`conferenceData.createRequest`) — happy to wire it up when you have the Google Cloud project.
 
 ---
 

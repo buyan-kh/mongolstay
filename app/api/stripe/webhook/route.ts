@@ -3,7 +3,6 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { findIntakeByReference, markIntakePaid } from "@/lib/intake";
 import { sendAttorneyAlert, sendClientConfirmation } from "@/lib/email";
-import { sendClientSmsConfirmation } from "@/lib/sms";
 import type { FlowKind, PaymentMethod } from "@/lib/flow-data";
 
 export const runtime = "nodejs";
@@ -62,18 +61,10 @@ export async function POST(req: Request) {
           schedule: schedulePayload,
         };
 
-        // Don't let email/SMS failures bounce the webhook (Stripe retries 5xx).
+        // Don't let email failures bounce the webhook (Stripe retries 5xx).
         await Promise.allSettled([
           sendClientConfirmation(confirmInput),
           sendAttorneyAlert(confirmInput),
-          full.client_phone
-            ? sendClientSmsConfirmation({
-                to: full.client_phone as string,
-                reference: full.reference as string,
-                kind: full.kind as FlowKind,
-                schedule: schedulePayload,
-              })
-            : Promise.resolve(),
         ]);
       }
     } catch (e) {

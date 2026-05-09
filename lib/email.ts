@@ -1,8 +1,11 @@
 import "server-only";
-import { getResend } from "./resend";
+import { sendMail } from "./mailer";
 import type { FlowKind, PaymentMethod } from "./flow-data";
 
-const FROM = process.env.RESEND_FROM || "Mongolstay <contact@mongolstay.com>";
+// MAIL_FROM is the visible "From:" header. Most setups want the same address
+// as GMAIL_USER, but you can also use an alias (e.g., support@) that's been
+// added to the same Google Workspace account.
+const FROM = process.env.MAIL_FROM || "Mongolstay <contact@mongolstay.com>";
 const ATTORNEY_INBOX = process.env.INTAKE_TO || "contact@mongolstay.com";
 // Permanent Google Meet room URL (one-time setup at meet.google.com → "Create
 // new meeting"). When set, video-appointment confirmations include the link.
@@ -50,7 +53,7 @@ function awaitingPaymentInstructions(input: ConfirmInput): string[] {
   const amt = `$${input.amountUsd.toLocaleString()}`;
   if (input.method === "zelle") {
     return [
-      `We'll text the Zelle handle to your phone shortly. Send ${amt} with memo "${input.reference}" — we'll mark your filing paid as soon as it lands (usually within minutes).`,
+      `Reply to this email and we'll send you the Zelle handle. Send ${amt} with memo "${input.reference}" — we'll mark your filing paid as soon as it lands (usually within minutes).`,
     ];
   }
   if (input.method === "cash") {
@@ -66,7 +69,7 @@ function awaitingPaymentInstructions(input: ConfirmInput): string[] {
 }
 
 export async function sendClientConfirmation(input: ConfirmInput) {
-  const resend = getResend();
+
   const scheduleLine = formatScheduleLine(input.schedule);
   const subject = input.paid
     ? `Mongolstay · ${FILING_LABEL[input.kind]} · ${input.reference}`
@@ -104,7 +107,7 @@ export async function sendClientConfirmation(input: ConfirmInput) {
     "— Mongolstay",
   );
 
-  return resend.emails.send({ from: FROM, to: input.to, subject, text: lines.join("\n") });
+  return sendMail({ from: FROM, to: input.to, subject, text: lines.join("\n") });
 }
 
 // Notification email to a client when an attorney posts a new message.
@@ -117,7 +120,7 @@ export async function sendClientMessage(input: {
   subject: string | null;
   body: string;
 }) {
-  const resend = getResend();
+
   const subjectLine = input.subject
     ? `Mongolstay · ${input.subject} · ${input.reference}`
     : `Mongolstay · New message · ${input.reference}`;
@@ -133,7 +136,7 @@ export async function sendClientMessage(input: {
     "",
     "— Mongolstay",
   ].filter(Boolean).join("\n");
-  return resend.emails.send({ from: FROM, to: input.to, subject: subjectLine, text });
+  return sendMail({ from: FROM, to: input.to, subject: subjectLine, text });
 }
 
 // Notification email to the attorney inbox when a client sends a message
@@ -146,7 +149,7 @@ export async function sendAttorneyMessageAlert(input: {
   body: string;
   attachmentCount: number;
 }) {
-  const resend = getResend();
+
   const subjectLine = input.subject
     ? `[Client] ${input.subject} · ${input.reference}`
     : `[Client] New message · ${input.reference}`;
@@ -159,7 +162,7 @@ export async function sendAttorneyMessageAlert(input: {
     "",
     `Reply at: https://mongolstay.com/admin/${input.reference}`,
   ].filter(Boolean).join("\n");
-  return resend.emails.send({ from: FROM, to: ATTORNEY_INBOX, subject: subjectLine, text });
+  return sendMail({ from: FROM, to: ATTORNEY_INBOX, subject: subjectLine, text });
 }
 
 // Notification email when an attorney refunds the case.
@@ -171,7 +174,7 @@ export async function sendRefundConfirmation(input: {
   method: PaymentMethod;
   reason?: string;
 }) {
-  const resend = getResend();
+
   const subject = `Mongolstay · Refund issued · ${input.reference}`;
   const text = [
     `Hi ${input.clientName || "there"},`,
@@ -186,11 +189,11 @@ export async function sendRefundConfirmation(input: {
     "",
     "— Mongolstay",
   ].filter(Boolean).join("\n");
-  return resend.emails.send({ from: FROM, to: input.to, subject, text });
+  return sendMail({ from: FROM, to: input.to, subject, text });
 }
 
 export async function sendAttorneyAlert(input: ConfirmInput) {
-  const resend = getResend();
+
   const scheduleLine = formatScheduleLine(input.schedule);
   const subject = `[Intake] ${FILING_LABEL[input.kind]} · ${input.clientName || "—"} · ${input.reference}`;
   const text = [
@@ -204,5 +207,5 @@ export async function sendAttorneyAlert(input: ConfirmInput) {
     `Payment:     $${input.amountUsd.toLocaleString()} · ${METHOD_LABEL[input.method]} · ${input.paid ? "PAID" : "AWAITING"}`,
   ].join("\n");
 
-  return resend.emails.send({ from: FROM, to: ATTORNEY_INBOX, subject, text });
+  return sendMail({ from: FROM, to: ATTORNEY_INBOX, subject, text });
 }

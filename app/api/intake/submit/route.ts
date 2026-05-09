@@ -8,7 +8,6 @@ import { verifyStoredDocument } from "@/lib/upload-verify";
 import { originAllowed, rateLimit, requestIp } from "@/lib/rate-limit";
 import { logAudit } from "@/lib/audit";
 import { sendAttorneyAlert, sendClientConfirmation } from "@/lib/email";
-import { sendClientSmsConfirmation } from "@/lib/sms";
 
 export const runtime = "nodejs";
 
@@ -131,14 +130,6 @@ export async function POST(req: Request) {
       : schedule.mode === "callback"
       ? { mode: "callback", window: schedule.window }
       : { mode: null };
-
-  // Fire-and-forget SMS confirmation (no-ops if Twilio env not set).
-  void sendClientSmsConfirmation({
-    to: contact.phone,
-    reference,
-    kind,
-    schedule: schedulePayload,
-  }).catch((e) => console.error("sms:confirm failed", e));
 
   // Email the client + attorney inbox NOW for Zelle/cash so they have a clear
   // "awaiting payment" record. Card flow handles its own email via the Stripe
