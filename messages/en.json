@@ -78,6 +78,9 @@
     "markPaid": "Mark paid",
     "markPaidConfirm": "Mark this intake as paid? Use this for Zelle/cash after you've reconciled the transfer.",
     "statusPaid": "Paid",
+    "markFiled": "Mark filed",
+    "markFiledConfirm": "Mark this intake as filed with USCIS? This sets the filed date the client sees on their dashboard.",
+    "statusFiled": "Filed",
     "refund": "Refund",
     "refundCardConfirm": "Refund this card payment via Stripe? The funds will return to the client's card in 5–10 business days.",
     "refundManualConfirm": "Mark this intake refunded? You'll need to send the Zelle/cash refund manually.",
@@ -168,7 +171,24 @@
     "time": "Time",
     "channel": "Mode",
     "callback": "Callback window",
-    "noDocuments": "No documents uploaded."
+    "noDocuments": "No documents uploaded.",
+    "appointmentLine": "Appointment {date}",
+    "callbackLine": "Callback · {window}",
+    "filedAtH": "Filed with USCIS",
+    "filedAtSub": "Sent {date}",
+    "progress": {
+      "title": "Where you are",
+      "paid": "Paid",
+      "paidSub": "Fee received",
+      "docs": "Documents",
+      "docsSub": "{count, plural, =0 {None uploaded} one {# file} other {# files}}",
+      "scheduled": "Scheduled",
+      "scheduledSub": "Appointment booked",
+      "scheduledNone": "Not scheduled",
+      "filed": "Filed",
+      "filedSub": "USCIS received it",
+      "filedPending": "Attorney filing"
+    }
   },
   "hero": {
     "eyebrow": "125 J-1 → F-1 approvals · 96% success rate",

@@ -91,6 +91,51 @@ export function MarkPaidButton({ reference, currentStatus }: {
   );
 }
 
+export function MarkFiledButton({ reference, filedAt, paymentStatus }: {
+  reference: string;
+  filedAt: string | null;
+  paymentStatus: string;
+}) {
+  const t = useTranslations("admin");
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+
+  if (filedAt) {
+    return (
+      <span className="admin-pill-status admin-pill-paid" title={new Date(filedAt).toLocaleString()}>
+        {t("statusFiled")}
+      </span>
+    );
+  }
+
+  // Don't expose Mark filed before they've paid — keeps the workflow honest.
+  if (paymentStatus !== "paid") {
+    return null;
+  }
+
+  const onClick = async () => {
+    if (!confirm(t("markFiledConfirm"))) return;
+    setBusy(true);
+    const res = await fetch("/api/admin/intake/mark-filed", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reference }),
+    });
+    setBusy(false);
+    if (!res.ok) {
+      alert(`Failed: ${res.status}`);
+      return;
+    }
+    router.refresh();
+  };
+
+  return (
+    <button type="button" className="btn btn-sm btn-primary" onClick={onClick} disabled={busy}>
+      {busy ? "…" : t("markFiled")}
+    </button>
+  );
+}
+
 export function RefundButton({ reference, currentStatus, paymentMethod }: {
   reference: string;
   currentStatus: string;

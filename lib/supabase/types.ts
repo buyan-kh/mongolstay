@@ -26,6 +26,7 @@ export type IntakeRow = {
   stripe_session_id: string | null;
   stripe_payment_intent: string | null;
   paid_at: string | null;
+  filed_at: string | null;
   attorney_notes: string | null;
 };
 

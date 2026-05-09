@@ -6,6 +6,7 @@ export type AuditAction =
   | "doc.download"
   | "intake.submit"
   | "intake.mark_paid"
+  | "intake.mark_filed"
   | "intake.refund"
   | "message.send"
   | "auth.signup"

@@ -12,6 +12,13 @@ type IntakeWithDocs = IntakeRow & {
     original_filename: string | null;
     created_at: string;
   }[];
+  intake_messages: {
+    id: string;
+    body: string;
+    subject: string | null;
+    direction: "in" | "out";
+    created_at: string;
+  }[];
 };
 
 export default async function Page({
@@ -29,7 +36,11 @@ export default async function Page({
 
   const { data: intakeRaw } = await supabase
     .from("intakes")
-    .select(`*, intake_documents (id, doc_id, original_filename, created_at)`)
+    .select(`
+      *,
+      intake_documents (id, doc_id, original_filename, created_at),
+      intake_messages (id, body, subject, direction, created_at)
+    `)
     .eq("reference", reference)
     .maybeSingle();
 
@@ -44,11 +55,59 @@ export default async function Page({
       : intake.payment_status === "awaiting"
       ? tInv("statusAwaiting")
       : intake.payment_status;
+  const status = intake.payment_status as
+    | "paid"
+    | "awaiting"
+    | "pending"
+    | "failed"
+    | "refunded";
 
   const apptDate =
     intake.schedule_mode === "appointment" && intake.appointment_at
       ? new Date(intake.appointment_at)
       : null;
+
+  const docCount = (intake.intake_documents ?? []).length;
+  const filedDate = intake.filed_at ? new Date(intake.filed_at) : null;
+
+  // Progress strip — 4 milestones from data we already have
+  const steps = [
+    {
+      key: "paid",
+      done: status === "paid" || status === "refunded" || !!filedDate,
+      label: t("progress.paid"),
+      sub: t("progress.paidSub"),
+    },
+    {
+      key: "docs",
+      done: docCount > 0,
+      label: t("progress.docs"),
+      sub: t("progress.docsSub", { count: docCount }),
+    },
+    {
+      key: "scheduled",
+      done: intake.schedule_mode !== null,
+      label: t("progress.scheduled"),
+      sub:
+        intake.schedule_mode !== null
+          ? t("progress.scheduledSub")
+          : t("progress.scheduledNone"),
+    },
+    {
+      key: "filed",
+      done: !!filedDate,
+      label: t("progress.filed"),
+      sub: filedDate
+        ? t("progress.filedSub")
+        : t("progress.filedPending"),
+    },
+  ] as const;
+  const currentIdx = steps.findIndex((s) => !s.done);
+
+  // Pick the most recent attorney message for the inline preview.
+  const lastFromAttorney = (intake.intake_messages ?? [])
+    .filter((m) => m.direction === "in")
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
 
   return (
     <>
@@ -75,12 +134,46 @@ export default async function Page({
         </p>
       </div>
 
+      <div className="progress-strip" style={{ marginBottom: 14 }} aria-label={t("progress.title")}>
+        {steps.map((s, i) => {
+          const isCurrent = !s.done && i === currentIdx;
+          return (
+            <div
+              key={s.key}
+              className={`progress-step ${s.done ? "done" : isCurrent ? "current" : ""}`}
+            >
+              <div className="pdot">{s.done ? "✓" : i + 1}</div>
+              <div className="plbl">{s.label}</div>
+              <div className="psub">{s.sub}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {filedDate && (
+        <section className="dash-section" style={{ borderColor: "color-mix(in oklab, var(--good) 25%, var(--line))", background: "color-mix(in oklab, var(--good) 4%, var(--bg))" }}>
+          <div className="dash-section-h" style={{ color: "var(--good)" }}>{t("filedAtH")}</div>
+          <div style={{ fontSize: 15, fontWeight: 500 }}>
+            {t("filedAtSub", {
+              date: filedDate.toLocaleDateString(locale, {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              }),
+            })}
+          </div>
+        </section>
+      )}
+
       <section className="dash-section">
         <div className="dash-section-h">{t("statusH")}</div>
         <div className="dash-status-grid">
           <div>
             <div className="dash-card-lbl">{t("status")}</div>
-            <div className={`dash-status dash-status-${intake.payment_status}`}>{statusLabel}</div>
+            <div>
+              <span className={`admin-pill-status admin-pill-${status}`}>{statusLabel}</span>
+            </div>
           </div>
           <div>
             <div className="dash-card-lbl">{tInv("paymentMethod")}</div>
@@ -164,7 +257,27 @@ export default async function Page({
             {t("openChat")} →
           </Link>
         </div>
-        <p className="dash-empty-s">{t("messagesPreview")}</p>
+        {lastFromAttorney ? (
+          <div className="dash-msg-preview">
+            <div className="dash-msg-preview-head">
+              <span>{t("fromAttorney")}</span>
+              <span>
+                {new Date(lastFromAttorney.created_at).toLocaleString(locale, {
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                })}
+              </span>
+            </div>
+            {lastFromAttorney.subject && (
+              <div style={{ fontSize: 14, fontWeight: 600 }}>{lastFromAttorney.subject}</div>
+            )}
+            <div className="dash-msg-preview-body">{lastFromAttorney.body}</div>
+          </div>
+        ) : (
+          <p className="dash-empty-s">{t("noMessages")}</p>
+        )}
       </section>
     </>
   );

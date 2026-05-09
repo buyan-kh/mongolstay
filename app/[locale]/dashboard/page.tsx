@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Icon } from "@/components/icons";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -15,6 +15,7 @@ type IntakeListRow = {
   appointment_at: string | null;
   callback_window: string | null;
   created_at: string;
+  filed_at: string | null;
   intake_messages: { id: string; read_at: string | null; direction: "in" | "out" }[];
 };
 
@@ -23,12 +24,14 @@ export default async function Page() {
   const t = await getTranslations("dashboard");
   const tPay = await getTranslations("flow.pay");
   const tInv = await getTranslations("flow.invoice");
+  const tSched = await getTranslations("flow.schedule");
+  const locale = await getLocale();
 
   const { data: intakes } = await supabase
     .from("intakes")
     .select(`
       id, reference, kind, payment_status, payment_method, paid_at, amount_cents,
-      schedule_mode, appointment_at, callback_window, created_at,
+      schedule_mode, appointment_at, callback_window, created_at, filed_at,
       intake_messages (id, read_at, direction)
     `)
     .order("created_at", { ascending: false });
@@ -68,7 +71,29 @@ export default async function Page() {
                 : it.payment_status === "awaiting"
                 ? tInv("statusAwaiting")
                 : it.payment_status;
-
+            const status = it.payment_status as
+              | "paid"
+              | "awaiting"
+              | "pending"
+              | "failed"
+              | "refunded";
+            const apptDate = it.appointment_at ? new Date(it.appointment_at) : null;
+            const scheduleLine =
+              it.schedule_mode === "appointment" && apptDate
+                ? t("appointmentLine", {
+                    date: apptDate.toLocaleString(locale, {
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    }),
+                  })
+                : it.schedule_mode === "callback" && it.callback_window
+                ? t("callbackLine", {
+                    window: tSched(`callback.windows.${it.callback_window}`),
+                  })
+                : null;
+            const submitted = new Date(it.created_at);
             return (
               <Link key={it.id} className="dash-card" href={`/dashboard/${it.reference}`}>
                 <div className="dash-card-head">
@@ -98,11 +123,30 @@ export default async function Page() {
                   </div>
                   <div>
                     <span className="dash-card-lbl">{t("status")}</span>
-                    <span className={`dash-status dash-status-${it.payment_status}`}>{statusLabel}</span>
+                    <span>
+                      <span className={`admin-pill-status admin-pill-${status}`}>
+                        {statusLabel}
+                      </span>
+                    </span>
                   </div>
                   <div>
                     <span className="dash-card-lbl">{t("amount")}</span>
                     <span className="mono">${(((it.amount_cents as number) ?? 0) / 100).toLocaleString()}.00</span>
+                  </div>
+                </div>
+                <div className="dash-card-foot">
+                  <div className="lhs">
+                    {scheduleLine ? (
+                      <>
+                        <Icon.Calendar style={{ width: 13, height: 13 }} />
+                        <span>{scheduleLine}</span>
+                      </>
+                    ) : (
+                      <span style={{ color: "var(--muted-2)" }}>{t("noSchedule")}</span>
+                    )}
+                  </div>
+                  <div className="rhs">
+                    <span>{t("submitted")} {submitted.toLocaleDateString(locale, { month: "short", day: "numeric" })}</span>
                   </div>
                 </div>
               </Link>

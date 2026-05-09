@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { Icon, BrandMark } from "@/components/icons";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SignOutButton } from "@/components/auth-forms";
-import { MarkPaidButton, RefundButton, ReplyForm } from "@/components/admin-actions";
+import { MarkPaidButton, MarkFiledButton, RefundButton, ReplyForm } from "@/components/admin-actions";
 import { requireAttorney } from "@/lib/auth";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { QUESTION_IDS } from "@/lib/flow-data";
@@ -138,6 +138,11 @@ export default async function Page({
             </div>
             <div className="admin-status-actions">
               <MarkPaidButton reference={intake.reference} currentStatus={intake.payment_status} />
+              <MarkFiledButton
+                reference={intake.reference}
+                filedAt={intake.filed_at}
+                paymentStatus={intake.payment_status}
+              />
               <RefundButton
                 reference={intake.reference}
                 currentStatus={intake.payment_status}
