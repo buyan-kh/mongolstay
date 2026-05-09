@@ -47,6 +47,12 @@ export const Icon = {
   X: (p: Props) => (
     <svg viewBox="0 0 16 16" {...base} {...p}><path d="M4 4l8 8M12 4l-8 8"/></svg>
   ),
+  Search: (p: Props) => (
+    <svg viewBox="0 0 16 16" {...base} {...p}><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L13.5 13.5"/></svg>
+  ),
+  Mail: (p: Props) => (
+    <svg viewBox="0 0 16 16" {...base} {...p}><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2.5 4.5l5.5 4 5.5-4"/></svg>
+  ),
 };
 
 export function BrandMark({ size = 22 }: { size?: number }) {
