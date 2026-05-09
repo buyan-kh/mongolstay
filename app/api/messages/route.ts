@@ -70,6 +70,7 @@ export async function POST(req: Request) {
       subject,
       body: messageBody,
       read_at: null,
+      sender_id: user.id,
     })
     .select("id")
     .single();

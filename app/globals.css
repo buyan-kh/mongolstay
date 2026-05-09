@@ -469,6 +469,19 @@ h1.hero-h em{font-style:italic;color:var(--accent)}
 .dash-card-foot .lhs{flex:1;overflow:hidden}
 .dash-card-foot .lhs span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
+/* upload-extra (client adds documents post-submission) */
+.upload-extra{padding:14px;background:var(--bg-2);border:1px dashed var(--line);border-radius:var(--r-md);margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.upload-extra-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.upload-extra-pick{display:inline-flex;align-items:center;gap:8px;padding:0 14px;height:38px;background:var(--bg);border:1px solid var(--line);border-radius:8px;font-size:13px;font-weight:500;color:var(--ink-2);cursor:pointer;transition:border-color .15s ease, color .15s ease;flex-shrink:0;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.upload-extra-pick:hover{border-color:var(--ink-2);color:var(--ink)}
+.upload-extra-label{flex:1;min-width:160px;height:38px}
+.upload-extra-hint{font-size:11.5px;color:var(--muted)}
+
+@media (max-width:640px){
+  .upload-extra-row{flex-direction:column;align-items:stretch}
+  .upload-extra-pick,.upload-extra-label{max-width:none}
+}
+
 /* last-message preview block on detail page */
 .dash-msg-preview{display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md);margin-top:8px}
 .dash-msg-preview-head{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}

@@ -245,7 +245,11 @@ export default async function Page({
                 <div key={m.id} className={`dash-message dash-message-${m.direction}`}>
                   <div className="dash-message-head">
                     <span className="dash-message-from">
-                      {m.direction === "in" ? t("youSent") : t("fromClient")}
+                      {m.direction === "in"
+                        ? m.sender_name
+                          ? t("namedSent", { name: m.sender_name })
+                          : t("youSent")
+                        : t("fromClient")}
                     </span>
                     <span className="dash-message-date">
                       {new Date(m.created_at).toLocaleString(locale, {

@@ -34,6 +34,13 @@
     "pwTooShort": "Password must be at least 10 characters.",
     "pwTooSimple": "Password needs an uppercase letter, lowercase letter, and a number.",
     "pwMismatch": "Passwords don't match.",
+    "referralCode": "Attorney referral code",
+    "referralCodePh": "e.g. MSM11",
+    "referralCodeHint": "An attorney code is required. Ask your attorney for theirs if you don't have one.",
+    "codeChecking": "Checking code…",
+    "codeValid": "Referred by {name}.",
+    "codeInvalid": "We don't recognize this code.",
+    "codeRequired": "Enter a valid attorney referral code to create an account.",
     "forgotLink": "Forgot your password?",
     "forgotH": "Reset your password",
     "forgotS": "Enter your email and we'll send you a link to set a new password.",
@@ -75,6 +82,7 @@
     "answersH": "Eligibility answers",
     "youSent": "You sent",
     "fromClient": "From client",
+    "namedSent": "{name} sent",
     "markPaid": "Mark paid",
     "markPaidConfirm": "Mark this intake as paid? Use this for Zelle/cash after you've reconciled the transfer.",
     "statusPaid": "Paid",
@@ -129,6 +137,8 @@
   "chat": {
     "empty": "No messages yet. Drop the first one to your attorney below.",
     "fromAttorney": "From your attorney",
+    "fromNamed": "From {name}",
+    "namedSent": "{name} sent",
     "fromClient": "From client",
     "youSent": "You sent",
     "phClient": "Write to your attorney…",
@@ -165,6 +175,7 @@
     "documentsH": "Documents",
     "noMessages": "No messages yet. Your attorney will reach out here once they review your file.",
     "fromAttorney": "From your attorney",
+    "fromNamed": "From {name}",
     "fromYou": "From you",
     "noSchedule": "No appointment scheduled yet.",
     "date": "Date",
@@ -188,6 +199,18 @@
       "filed": "Filed",
       "filedSub": "USCIS received it",
       "filedPending": "Attorney filing"
+    },
+    "uploadExtra": {
+      "title": "Upload more documents",
+      "sub": "Add anything your attorney requested — passport scans, marriage certificates, employment letters, etc.",
+      "pickFile": "Choose file…",
+      "labelPh": "What is this? (optional)",
+      "upload": "Upload",
+      "uploading": "Uploading…",
+      "hint": "PDF / JPG / PNG / WebP up to 10MB.",
+      "errorType": "Unsupported file type.",
+      "errorSize": "File over 10MB.",
+      "errorGeneric": "Upload failed — try again."
     }
   },
   "hero": {

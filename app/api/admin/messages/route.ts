@@ -44,6 +44,18 @@ export async function POST(req: Request) {
     .maybeSingle();
   if (intakeErr || !intake) return NextResponse.json({ error: "not found" }, { status: 404 });
 
+  // Look up the attorney's display name for the message header. Falls back to
+  // the email's local-part so even attorneys without full_name set show
+  // something more human than "your attorney".
+  const { data: profile } = await sb
+    .from("profiles")
+    .select("full_name")
+    .eq("id", user.id)
+    .maybeSingle();
+  const senderName =
+    profile?.full_name?.trim() ||
+    (user.email ? user.email.split("@")[0] : null);
+
   const { data: inserted, error } = await sb
     .from("intake_messages")
     .insert({
@@ -52,6 +64,8 @@ export async function POST(req: Request) {
       subject,
       body: messageBody,
       read_at: null,
+      sender_id: user.id,
+      sender_name: senderName,
     })
     .select("id")
     .single();

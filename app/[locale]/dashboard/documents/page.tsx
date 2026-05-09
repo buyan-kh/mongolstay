@@ -11,6 +11,7 @@ type DocsRow = {
     id: string;
     doc_id: string;
     original_filename: string | null;
+    label: string | null;
     mime_type: string | null;
     size_bytes: number | null;
     created_at: string;
@@ -34,7 +35,7 @@ export default async function Page() {
     .from("intakes")
     .select(`
       id, reference, kind,
-      intake_documents (id, doc_id, original_filename, mime_type, size_bytes, created_at)
+      intake_documents (id, doc_id, original_filename, label, mime_type, size_bytes, created_at)
     `)
     .order("created_at", { ascending: false });
 
@@ -80,7 +81,7 @@ export default async function Page() {
                   <li key={d.id} className="dash-doc">
                     <Icon.File style={{ width: 14, height: 14 }} />
                     <a href={`/api/download/${d.id}`} target="_blank" rel="noopener" style={{ color: "inherit", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {d.original_filename || d.doc_id}
+                      {d.label || d.original_filename || d.doc_id}
                     </a>
                     <span className="dash-card-lbl">
                       {fmtBytes(d.size_bytes)} ·{" "}

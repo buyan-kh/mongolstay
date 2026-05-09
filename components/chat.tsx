@@ -15,6 +15,7 @@ export type ChatMessage = {
   subject: string | null;
   body: string;
   read_at: string | null;
+  sender_name: string | null;
   attachments: {
     id: string;
     original_filename: string | null;
@@ -164,11 +165,20 @@ export function Chat({ reference, messages, viewer }: Props) {
 
   // Direction labels: 'in' = attorney→client, 'out' = client→attorney.
   // From each viewer's perspective:
-  //   client: 'in' = "from attorney", 'out' = "you sent"
-  //   attorney: 'in' = "you sent", 'out' = "from client"
+  //   client: 'in' = "from <attorney name>" (or "from your attorney" fallback), 'out' = "you sent"
+  //   attorney: 'in' = "<own name> (you)" or "you sent" if no name, 'out' = "from client"
   const labelFor = (m: ChatMessage) => {
-    if (viewer === "client") return m.direction === "in" ? t("fromAttorney") : t("youSent");
-    return m.direction === "in" ? t("youSent") : t("fromClient");
+    if (viewer === "client") {
+      if (m.direction === "in") {
+        return m.sender_name ? t("fromNamed", { name: m.sender_name }) : t("fromAttorney");
+      }
+      return t("youSent");
+    }
+    // Attorney view
+    if (m.direction === "in") {
+      return m.sender_name ? t("namedSent", { name: m.sender_name }) : t("youSent");
+    }
+    return t("fromClient");
   };
   const sideFor = (m: ChatMessage) => {
     // "us" sits on the right, "them" on the left. From each viewer:

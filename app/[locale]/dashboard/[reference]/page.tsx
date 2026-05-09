@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { Icon } from "@/components/icons";
 import { getServerSupabase } from "@/lib/supabase/server";
+import { UploadExtra } from "@/components/upload-extra";
 import type { IntakeRow } from "@/lib/supabase/types";
 
 type IntakeWithDocs = IntakeRow & {
@@ -10,6 +11,7 @@ type IntakeWithDocs = IntakeRow & {
     id: string;
     doc_id: string;
     original_filename: string | null;
+    label: string | null;
     created_at: string;
   }[];
   intake_messages: {
@@ -18,6 +20,7 @@ type IntakeWithDocs = IntakeRow & {
     subject: string | null;
     direction: "in" | "out";
     created_at: string;
+    sender_name: string | null;
   }[];
 };
 
@@ -38,8 +41,8 @@ export default async function Page({
     .from("intakes")
     .select(`
       *,
-      intake_documents (id, doc_id, original_filename, created_at),
-      intake_messages (id, body, subject, direction, created_at)
+      intake_documents (id, doc_id, original_filename, label, created_at),
+      intake_messages (id, body, subject, direction, created_at, sender_name)
     `)
     .eq("reference", reference)
     .maybeSingle();
@@ -241,13 +244,14 @@ export default async function Page({
               <li key={d.id} className="dash-doc">
                 <Icon.File style={{ width: 14, height: 14 }} />
                 <a href={`/api/download/${d.id}`} target="_blank" rel="noopener" style={{ color: "inherit" }}>
-                  {d.original_filename || d.doc_id}
+                  {d.label || d.original_filename || d.doc_id}
                 </a>
                 <span className="dash-card-lbl mono" style={{ marginLeft: "auto" }}>{d.doc_id}</span>
               </li>
             ))}
           </ul>
         )}
+        <UploadExtra reference={reference} />
       </section>
 
       <section className="dash-section">
@@ -260,7 +264,11 @@ export default async function Page({
         {lastFromAttorney ? (
           <div className="dash-msg-preview">
             <div className="dash-msg-preview-head">
-              <span>{t("fromAttorney")}</span>
+              <span>
+                {lastFromAttorney.sender_name
+                  ? t("fromNamed", { name: lastFromAttorney.sender_name })
+                  : t("fromAttorney")}
+              </span>
               <span>
                 {new Date(lastFromAttorney.created_at).toLocaleString(locale, {
                   month: "short",

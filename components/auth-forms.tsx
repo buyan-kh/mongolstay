@@ -66,10 +66,51 @@ export function SignupForm({ next }: { next?: string }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
+  const [codeStatus, setCodeStatus] = useState<
+    | { state: "idle" }
+    | { state: "checking" }
+    | { state: "valid"; attorneyName: string }
+    | { state: "invalid" }
+  >({ state: "idle" });
   const [s, setS] = useState<FormState>({ busy: false, error: null, notice: null });
+
+  const validateCode = async (raw: string) => {
+    const v = raw.trim();
+    if (!v) {
+      setCodeStatus({ state: "idle" });
+      return null;
+    }
+    setCodeStatus({ state: "checking" });
+    try {
+      const res = await fetch("/api/referral/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: v }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (data?.valid && data?.attorneyName) {
+        setCodeStatus({ state: "valid", attorneyName: data.attorneyName });
+        return v.toUpperCase();
+      }
+      setCodeStatus({ state: "invalid" });
+      return null;
+    } catch {
+      setCodeStatus({ state: "invalid" });
+      return null;
+    }
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate the referral code fresh at submit (covers paste-into-field
+    // without onBlur). If invalid we never call signUp.
+    const validatedCode = await validateCode(code);
+    if (!validatedCode) {
+      setS({ busy: false, error: t("codeRequired"), notice: null });
+      return;
+    }
 
     // Client-side password policy. Server-side enforcement also lives in
     // supabase/config.toml (minimum_password_length + password_requirements).
@@ -89,7 +130,9 @@ export function SignupForm({ next }: { next?: string }) {
       email,
       password,
       options: {
-        data: { full_name: name },
+        // referral_code rides along in raw_user_meta_data — the
+        // create_profile_on_signup trigger reads it and sets profiles.referred_by_code.
+        data: { full_name: name, referral_code: validatedCode },
         emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next || "/dashboard")}`,
       },
     });
@@ -111,6 +154,39 @@ export function SignupForm({ next }: { next?: string }) {
 
   return (
     <form className="auth-form" onSubmit={submit}>
+      <label className="field">
+        <span className="field-lbl">{t("referralCode")}</span>
+        <input
+          className="ipt"
+          type="text"
+          required
+          autoComplete="off"
+          autoCapitalize="characters"
+          spellCheck={false}
+          value={code}
+          onChange={(e) => {
+            const v = e.target.value.toUpperCase();
+            setCode(v);
+            if (codeStatus.state !== "idle") setCodeStatus({ state: "idle" });
+          }}
+          onBlur={(e) => void validateCode(e.target.value)}
+          placeholder={t("referralCodePh")}
+        />
+        {codeStatus.state === "checking" && (
+          <span className="field-hint">{t("codeChecking")}</span>
+        )}
+        {codeStatus.state === "valid" && (
+          <span className="field-hint" style={{ color: "var(--good)" }}>
+            {t("codeValid", { name: codeStatus.attorneyName })}
+          </span>
+        )}
+        {codeStatus.state === "invalid" && (
+          <span className="field-err">{t("codeInvalid")}</span>
+        )}
+        {codeStatus.state === "idle" && (
+          <span className="field-hint">{t("referralCodeHint")}</span>
+        )}
+      </label>
       <label className="field">
         <span className="field-lbl">{t("name")}</span>
         <input
@@ -149,7 +225,11 @@ export function SignupForm({ next }: { next?: string }) {
       </label>
       {s.error && <div className="field-err" role="alert">{s.error}</div>}
       {s.notice && <div className="field-hint" style={{ color: "var(--good)" }}>{s.notice}</div>}
-      <button type="submit" className="btn btn-accent btn-lg" disabled={s.busy}>
+      <button
+        type="submit"
+        className="btn btn-accent btn-lg"
+        disabled={s.busy || codeStatus.state === "invalid" || codeStatus.state === "checking"}
+      >
         {s.busy ? t("workingSignUp") : t("signUp")}
       </button>
     </form>

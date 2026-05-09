@@ -46,9 +46,12 @@ export type IntakeDocumentRow = {
   original_filename: string | null;
   mime_type: string | null;
   size_bytes: number | null;
+  label: string | null;
 };
 
-export type IntakeDocumentInsert = Omit<IntakeDocumentRow, "id" | "created_at">;
+export type IntakeDocumentInsert = Omit<IntakeDocumentRow, "id" | "created_at" | "label"> & {
+  label?: string | null;
+};
 
 export type IntakeMessageRow = {
   id: string;
@@ -58,9 +61,14 @@ export type IntakeMessageRow = {
   subject: string | null;
   body: string;
   read_at: string | null;
+  sender_id: string | null;
+  sender_name: string | null;
 };
 
-export type IntakeMessageInsert = Omit<IntakeMessageRow, "id" | "created_at">;
+export type IntakeMessageInsert = Omit<IntakeMessageRow, "id" | "created_at" | "sender_id" | "sender_name"> & {
+  sender_id?: string | null;
+  sender_name?: string | null;
+};
 
 export type IntakeMessageAttachmentRow = {
   id: string;
@@ -79,6 +87,19 @@ export type ProfileRow = {
   created_at: string;
   role: "client" | "attorney";
   full_name: string | null;
+  referred_by_code: string | null;
+};
+
+export type ReferralCodeRow = {
+  code: string;
+  attorney_id: string | null;
+  attorney_name: string;
+  active: boolean;
+  created_at: string;
+};
+
+export type ReferralCodeInsert = Omit<ReferralCodeRow, "created_at"> & {
+  created_at?: string;
 };
 
 export type AuditEventRow = {
@@ -102,6 +123,7 @@ export type Database = {
       intake_messages: { Row: IntakeMessageRow; Insert: IntakeMessageInsert; Update: Partial<IntakeMessageRow>; Relationships: [] };
       intake_message_attachments: { Row: IntakeMessageAttachmentRow; Insert: IntakeMessageAttachmentInsert; Update: Partial<IntakeMessageAttachmentRow>; Relationships: [] };
       profiles: { Row: ProfileRow; Insert: Partial<ProfileRow> & { id: string }; Update: Partial<ProfileRow>; Relationships: [] };
+      referral_codes: { Row: ReferralCodeRow; Insert: ReferralCodeInsert; Update: Partial<ReferralCodeRow>; Relationships: [] };
       audit_events: { Row: AuditEventRow; Insert: AuditEventInsert; Update: Partial<AuditEventRow>; Relationships: [] };
     };
     Views: Record<string, never>;

@@ -13,6 +13,7 @@ type MessageWithAttachments = {
   subject: string | null;
   body: string;
   read_at: string | null;
+  sender_name: string | null;
   intake_message_attachments: {
     id: string;
     original_filename: string | null;
@@ -42,7 +43,7 @@ export default async function Page({
   const { data: rows } = await supabase
     .from("intake_messages")
     .select(`
-      id, created_at, direction, subject, body, read_at,
+      id, created_at, direction, subject, body, read_at, sender_name,
       intake_message_attachments (id, original_filename, mime_type, size_bytes)
     `)
     .eq("intake_id", intake.id)
@@ -55,6 +56,7 @@ export default async function Page({
     subject: m.subject,
     body: m.body,
     read_at: m.read_at,
+    sender_name: m.sender_name,
     attachments: m.intake_message_attachments ?? [],
   }));
 
