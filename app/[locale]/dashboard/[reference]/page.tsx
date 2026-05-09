@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { Icon } from "@/components/icons";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { UploadExtra } from "@/components/upload-extra";
+import { PayNowBanner } from "@/components/pay-now-banner";
 import type { IntakeRow } from "@/lib/supabase/types";
 
 type IntakeWithDocs = IntakeRow & {
@@ -137,7 +138,27 @@ export default async function Page({
         </p>
       </div>
 
-      <div className="progress-strip" style={{ marginBottom: 14 }} aria-label={t("progress.title")}>
+      {(status === "awaiting" || status === "pending" || status === "failed") && (
+        <PayNowBanner
+          reference={intake.reference}
+          amountCents={(intake.amount_cents as number) ?? 0}
+          daysWaiting={Math.max(
+            0,
+            Math.floor(
+              (Date.now() - new Date(intake.created_at).getTime()) /
+                (24 * 60 * 60 * 1000),
+            ),
+          )}
+          zelleEmail={process.env.NEXT_PUBLIC_ZELLE_EMAIL ?? "pay@mongolstay.com"}
+          zelleName={process.env.NEXT_PUBLIC_ZELLE_NAME ?? "Mongolstay PLLC"}
+        />
+      )}
+
+      <div
+        className={`progress-strip ${status !== "paid" && status !== "refunded" ? "needs-pay" : ""}`}
+        style={{ marginBottom: 14 }}
+        aria-label={t("progress.title")}
+      >
         {steps.map((s, i) => {
           const isCurrent = !s.done && i === currentIdx;
           return (

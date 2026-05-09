@@ -450,6 +450,45 @@ h1.hero-h em{font-style:italic;color:var(--accent)}
 .dash-status-failed{color:var(--warn)}
 .dash-status-refunded{color:var(--muted)}
 
+/* pay-now banner — client dashboard, shown when intake is unpaid */
+.pay-banner{background:linear-gradient(180deg, color-mix(in oklab, var(--accent) 6%, var(--bg)) 0%, var(--bg) 100%);
+  border:1px solid color-mix(in oklab, var(--accent) 30%, var(--line));border-radius:var(--r-lg);padding:24px 26px;margin-bottom:14px;
+  box-shadow:0 1px 0 rgba(11,18,32,.04), 0 12px 36px -16px color-mix(in oklab, var(--accent) 30%, transparent)}
+.pay-banner-h-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.pay-banner-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.pay-banner-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent);flex-shrink:0}
+.pay-banner-urgency{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:color-mix(in oklab, var(--warn) 12%, var(--bg));border:1px solid color-mix(in oklab, var(--warn) 28%, var(--bg));border-radius:999px;font-size:12px;font-weight:600;color:var(--warn);letter-spacing:.01em}
+.pay-banner-h{font-family:var(--serif);font-size:30px;line-height:1.1;letter-spacing:-0.02em;font-weight:400;margin:0 0 8px;color:var(--ink)}
+.pay-banner-sub{margin:0 0 16px;color:var(--ink-2);font-size:15px;line-height:1.5;max-width:60ch}
+.pay-banner-list{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--ink-2)}
+.pay-banner-list li{display:inline-flex;align-items:center;gap:8px}
+.pay-banner-list svg{color:var(--good);flex-shrink:0}
+.pay-banner-cta{display:flex;gap:10px;flex-wrap:wrap}
+.pay-banner-zelle{margin-top:14px;padding:14px 16px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md)}
+
+/* index card — unpaid emphasis */
+.dash-card-unpaid{border-color:color-mix(in oklab, var(--warn) 35%, var(--line));
+  background:linear-gradient(180deg, color-mix(in oklab, var(--warn) 4%, var(--bg)) 0%, var(--bg) 60%)}
+.dash-card-unpaid:hover{border-color:var(--warn);box-shadow:0 1px 0 rgba(11,18,32,.04), 0 12px 32px -14px color-mix(in oklab, var(--warn) 35%, transparent)}
+.dash-card-pay-cta{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--accent);color:var(--accent-ink);border-radius:999px;font-size:12.5px;font-weight:600;letter-spacing:.01em;
+  box-shadow:0 1px 0 rgba(255,255,255,.2) inset, 0 6px 18px -8px var(--accent);transition:transform .08s ease, background .15s ease}
+.dash-card-unpaid:hover .dash-card-pay-cta{background:var(--accent-2)}
+
+/* progress strip needs-pay tweak — paid step (first) glows warn */
+.progress-strip.needs-pay .progress-step:first-child:not(.done) .pdot{
+  background:color-mix(in oklab, var(--warn) 12%, var(--bg));
+  border-color:var(--warn);
+  color:var(--warn);
+  box-shadow:0 0 0 4px color-mix(in oklab, var(--warn) 18%, transparent);
+  animation:payPulse 2.4s ease-in-out infinite
+}
+.progress-strip.needs-pay .progress-step:first-child:not(.done) .plbl{color:var(--warn)}
+
+@keyframes payPulse {
+  0%, 100% { box-shadow:0 0 0 4px color-mix(in oklab, var(--warn) 18%, transparent); }
+  50%      { box-shadow:0 0 0 7px color-mix(in oklab, var(--warn) 8%, transparent); }
+}
+
 /* progress strip — client dashboard "where you are" */
 .progress-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 4px;position:relative}
 .progress-step{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:0 10px;position:relative;flex:1;min-width:0}

@@ -185,6 +185,25 @@
     "noDocuments": "No documents uploaded.",
     "appointmentLine": "Appointment {date}",
     "callbackLine": "Callback · {window}",
+    "payCardCta": "Pay {amount} to start →",
+    "daysWaiting": "{count, plural, one {Waiting # day} other {Waiting # days}}",
+    "pay": {
+      "banner": {
+        "eyebrow": "Action required",
+        "h": "One step away — finish payment to start your filing",
+        "sub": "Your application is saved. Pay the {amount} flat fee and an attorney will start preparing your filing today.",
+        "v1": "A licensed immigration attorney reviews everything before USCIS sees it",
+        "v2": "We file with USCIS, track every receipt, and message you here when it lands",
+        "v3": "Refunded if our attorneys decline your case after review"
+      },
+      "payCard": "Pay {amount} with card",
+      "payZelle": "Pay with Zelle",
+      "zelleHide": "Hide Zelle details",
+      "zelleInstructions": "Send {amount} via Zelle to {email} ({name}).",
+      "zelleMemo": "Include this reference in the memo:",
+      "redirecting": "Redirecting to checkout…",
+      "errorGeneric": "Couldn't start checkout — try again."
+    },
     "filedAtH": "Filed with USCIS",
     "filedAtSub": "Sent {date}",
     "progress": {

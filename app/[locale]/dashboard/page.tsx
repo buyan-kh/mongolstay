@@ -94,8 +94,20 @@ export default async function Page() {
                   })
                 : null;
             const submitted = new Date(it.created_at);
+            const unpaid =
+              status === "awaiting" || status === "pending" || status === "failed";
+            const daysWaiting = Math.max(
+              0,
+              Math.floor(
+                (Date.now() - submitted.getTime()) / (24 * 60 * 60 * 1000),
+              ),
+            );
             return (
-              <Link key={it.id} className="dash-card" href={`/dashboard/${it.reference}`}>
+              <Link
+                key={it.id}
+                className={`dash-card ${unpaid ? "dash-card-unpaid" : ""}`}
+                href={`/dashboard/${it.reference}`}
+              >
                 <div className="dash-card-head">
                   <div className="dash-card-tag">
                     <span
@@ -135,19 +147,55 @@ export default async function Page() {
                   </div>
                 </div>
                 <div className="dash-card-foot">
-                  <div className="lhs">
-                    {scheduleLine ? (
-                      <>
-                        <Icon.Calendar style={{ width: 13, height: 13 }} />
-                        <span>{scheduleLine}</span>
-                      </>
-                    ) : (
-                      <span style={{ color: "var(--muted-2)" }}>{t("noSchedule")}</span>
-                    )}
-                  </div>
-                  <div className="rhs">
-                    <span>{t("submitted")} {submitted.toLocaleDateString(locale, { month: "short", day: "numeric" })}</span>
-                  </div>
+                  {unpaid ? (
+                    <>
+                      <div className="lhs">
+                        <span className="dash-card-pay-cta">
+                          {t("payCardCta", {
+                            amount: `$${(((it.amount_cents as number) ?? 0) / 100).toLocaleString()}`,
+                          })}
+                          <Icon.ArrowRight style={{ width: 12, height: 12 }} />
+                        </span>
+                      </div>
+                      <div className="rhs">
+                        {daysWaiting >= 1 ? (
+                          <span style={{ color: "var(--warn)" }}>
+                            {t("daysWaiting", { count: daysWaiting })}
+                          </span>
+                        ) : (
+                          <span>
+                            {t("submitted")}{" "}
+                            {submitted.toLocaleDateString(locale, {
+                              month: "short",
+                              day: "numeric",
+                            })}
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="lhs">
+                        {scheduleLine ? (
+                          <>
+                            <Icon.Calendar style={{ width: 13, height: 13 }} />
+                            <span>{scheduleLine}</span>
+                          </>
+                        ) : (
+                          <span style={{ color: "var(--muted-2)" }}>{t("noSchedule")}</span>
+                        )}
+                      </div>
+                      <div className="rhs">
+                        <span>
+                          {t("submitted")}{" "}
+                          {submitted.toLocaleDateString(locale, {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </Link>
             );
