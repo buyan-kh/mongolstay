@@ -5,6 +5,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { BrandMark, Icon } from "@/components/icons";
 import { getUser } from "@/lib/auth";
 import { redirect } from "@/i18n/navigation";
+import { isSafeNextPath } from "@/lib/safe-next";
 
 export default async function Page({
   params,
@@ -14,7 +15,8 @@ export default async function Page({
   searchParams: Promise<{ next?: string }>;
 }) {
   const { locale } = await params;
-  const { next } = await searchParams;
+  const { next: rawNext } = await searchParams;
+  const next = isSafeNextPath(rawNext) ? rawNext : undefined;
 
   // Already signed in? Skip the form.
   const user = await getUser();
